@@ -5,7 +5,7 @@
     android:id="@+id/miToolBar"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/principalBoton"
+    android:background="@color/boton_principal"
     android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
     app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
 
@@ -18,7 +18,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="SimaGrow"
-            android:textColor="@color/fondo"
+            android:textColor="@color/texto_sobre_boton"
             style="@style/TextAppearance.Material3.ActionBar.Title"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

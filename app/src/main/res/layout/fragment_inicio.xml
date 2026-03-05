@@ -1,61 +1,248 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/inicioFragment"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".fragments.InicioFragment">
+    android:layout_height="match_parent">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
         android:padding="16dp">
 
-        <!-- Bienvenida -->
         <TextView
+            android:id="@+id/tvBienvenida"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:gravity="center"
-            android:text="¡Bienvenido a SimaGrow 2026!"
-            android:textSize="24sp"
-            android:textStyle="bold" />
-
-        <!-- Card: Crear Incidencia -->
-        <com.google.android.material.card.MaterialCardView
-            android:layout_width="wrap_content"
-            android:layout_height="162dp"
+            android:text="Bienvenido a SimaGrow, Alumno"
+            android:textSize="20sp"
             android:layout_marginBottom="16dp"
-            android:backgroundTint="@color/secundarioBoton"
-            android:padding="24dp"
-            app:cardCornerRadius="16dp"
-            app:cardElevation="6dp">
+            android:textStyle="bold"
+            android:textColor="@color/texto_principal"
+            android:gravity="start" />
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cvMensajeGlobal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            app:cardBackgroundColor="@color/fondo_tarjeta"
+            app:cardCornerRadius="24dp"
+            app:cardElevation="4dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:orientation="vertical">
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="24dp">
 
-                <ImageView
-                    android:id="@+id/btnCrearIncidencia"
-                    android:layout_width="34dp"
-                    android:layout_height="34dp"
-                    android:layout_gravity="center"
-                    android:src="@drawable/outline_add_notes_24" />
-
-                <TextView
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="12dp"
-                    android:padding="10dp"
-                    android:text="Crear Incidencia"
-                    android:textSize="22sp"
-                    android:textStyle="bold"
-                    android:textColor="@color/principal"/>
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/tvTituloMensaje"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="sans-serif-black"
+                            android:text="Comunicado Oficial del Centro"
+                            android:textColor="@color/texto_principal"
+                            android:textSize="16sp" />
+
+                        <TextView
+                            android:id="@+id/tvMensajeComunicado"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp"
+                            android:lineSpacingExtra="2dp"
+                            android:text="El equipo directivo informa a toda la comunidad educativa que, con motivo de la jornada de puertas abiertas, el horario del próximo miércoles se verá modificado. Se ruega al alumnado y profesorado que consulten los cambios publicados en el tablón oficial y en la plataforma educativa."
+                            android:textColor="@color/texto_secundario"
+                            android:textSize="12sp" />
+
+                    </LinearLayout>
+                </LinearLayout>
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:orientation="horizontal">
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cvFormularioProfe"
+                android:layout_width="175dp"
+                android:layout_height="175dp"
+                android:layout_marginEnd="15dp"
+                android:clickable="true"
+                android:focusable="true"
+                app:cardBackgroundColor="@color/fondo_tarjeta"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="8dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="start"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <ImageView
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:contentDescription="Pokemon Random"
+                        android:src="@drawable/outline_forward_to_inbox_24"
+                        app:tint="?attr/colorOnBackground" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Formulario "
+                        android:textColor="@color/texto_principal"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Quieres enviar un mensaje a tu profesor?"
+                        android:textColor="@color/texto_principal"
+                        android:textSize="12sp"
+                        android:textStyle="bold" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnFormProfesor"
+                        android:layout_width="140dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="15dp"
+                        android:backgroundTint="@color/boton_principal"
+                        android:gravity="center"
+                        android:text="ir"
+                        android:textColor="@color/texto_sobre_boton" />
+
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <!-- CardView: Favoritos -->
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/cvCrearIncidencia"
+                    android:layout_width="160dp"
+                    android:layout_height="60dp"
+                    android:layout_marginBottom="15dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    app:cardBackgroundColor="@color/fondo_tarjeta"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="8dp">
+
+                    <LinearLayout
+                        android:layout_width="160dp"
+                        android:layout_height="60dp"
+                        android:gravity="center"
+                        android:orientation="horizontal"
+                        android:padding="16dp">
+
+                        <ImageView
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:layout_marginEnd="5dp"
+                            android:contentDescription="crear incidencia"
+                            android:src="@drawable/outline_add_notes_24"
+                            app:tint="?attr/colorOnBackground" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="38dp"
+                            android:layout_marginEnd="5dp"
+                            android:text="Crear incidencia"
+                            android:textColor="@color/texto_principal"
+                            android:textSize="14dp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+
+                </com.google.android.material.card.MaterialCardView>
+                <!-- CardView: Favoritos -->
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/cvContadorIncidencias"
+                    android:layout_width="160dp"
+                    android:layout_height="wrap_content"
+                    android:clickable="true"
+                    android:focusable="true"
+                    app:cardBackgroundColor="@color/fondo_tarjeta"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="8dp">
+
+                    <LinearLayout
+                        android:layout_width="160dp"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:orientation="horizontal"
+                        android:padding="16dp">
+
+                        <ImageView
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:layout_marginEnd="5dp"
+                            android:contentDescription="IncidenciasContador"
+                            android:src="@drawable/outline_energy_program_saving_24"
+                            app:tint="?attr/colorOnBackground" />
+
+                        <TextView
+                            android:layout_width="77dp"
+                            android:layout_height="40dp"
+                            android:layout_marginEnd="5dp"
+                            android:text="Incidencias totales"
+                            android:textColor="@color/texto_principal"
+                            android:textSize="14dp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/tvContador"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="0"
+                            android:textColor="@color/texto_secundario"
+                            android:textSize="14dp"
+                            android:textStyle="bold" />
+
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+            </LinearLayout>
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Noticias del Instituto"
+            android:textSize="18dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
+            android:textStyle="bold"
+            android:textColor="@color/texto_principal"
+            android:gravity="start" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerViewNoticias"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:padding="8dp"
+            tools:listitem="@layout/item_noticia" />
+
     </LinearLayout>
-</LinearLayout>
+</ScrollView>

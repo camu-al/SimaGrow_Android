@@ -3,12 +3,19 @@
         android:id="@+id/bottom_IncidenciasTotales"
         android:title="Incidencias Totales"
         android:icon="@drawable/outline_energy_program_time_used_24"/>
+
     <item
-        android:id="@+id/navGestionAlumnos"
+        android:id="@+id/bottom_HomeProfe"
+        android:title="Inicio"
+        android:icon="@drawable/outline_home_24"/>
+
+    <item
+        android:id="@+id/bottom_Gestionar_Alumnos"
         android:title="Gestionar alumnos"
         android:icon="@android:drawable/ic_menu_manage"/>
+
     <item
-        android:id="@+id/navPerfil"
-        android:title="Perfil"
-        android:icon="@drawable/outline_contacts_product_24"/>
+        android:id="@+id/bottom_Mensaje_Alumnos"
+        android:title="Mensajes"
+        android:icon="@drawable/outline_stacked_email_24"/>
 </menu>

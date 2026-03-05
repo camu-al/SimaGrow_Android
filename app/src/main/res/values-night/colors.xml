@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Colores principales de marca -->
+    <color name="color_principal">#A7D8B1</color>              <!-- Verde claro para contraste con fondo oscuro -->
+    <color name="color_principal_variante">#8FC7A0</color>
+    <color name="color_secundario">#B0CBB3</color>
+    <color name="color_secundario_variante">#9ABFA4</color>
+
+    <!-- Fondos generales -->
+    <color name="fondo_principal">#121212</color>              <!-- Fondo general oscuro -->
+    <color name="fondo_secundario">#1E1E1E</color>            <!-- Fondo secciones oscuro -->
+
+    <!-- Tarjetas -->
+    <color name="fondo_tarjeta">#1E1E1E</color>               <!-- Card principal oscuro -->
+    <color name="fondo_tarjeta_secundaria">#2C2C2C</color>    <!-- Card secundaria oscuro -->
+    <color name="borde_tarjeta">#3A3A3A</color>               <!-- Bordes suaves oscuro -->
+
+    <!-- Botones -->
+    <color name="boton_principal">#4CAF50</color>             <!-- Verde destacado -->
+    <color name="boton_principal_presionado">#388E3C</color>
+    <color name="boton_secundario">#81C784</color>
+    <color name="boton_secundario_presionado">#66BB6A</color>
+
+    <!-- Texto -->
+    <color name="texto_principal">#FFFFFF</color>             <!-- Texto sobre fondo oscuro -->
+    <color name="texto_secundario">#CCCCCC</color>
+    <color name="texto_sobre_boton">#FFFFFF</color>
+    <color name="texto_sobre_tarjeta">#EAF5EE</color>         <!-- Texto sobre tarjeta oscura -->
+
+    <!-- Menú inferior / navegación -->
+    <color name="menu_fondo_normal">#1E1E1E</color>
+    <color name="menu_fondo_seleccionado">#4CAF50</color>
+    <color name="menu_texto_normal">#CCCCCC</color>
+    <color name="menu_texto_seleccionado">#FFFFFF</color>
+
+    <!-- Estados -->
+    <color name="estado_exito">#81C784</color>
+    <color name="estado_advertencia">#FFD54F</color>
+    <color name="estado_error">#E57373</color>
+    <color name="tipo_incidencia">#90CAF9</color>              <!-- Azul claro para contraste -->
+    <color name="texto_noticia_secundario">#AAAAAA</color>
+
+</resources>

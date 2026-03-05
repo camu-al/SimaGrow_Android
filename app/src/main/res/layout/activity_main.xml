@@ -29,9 +29,7 @@
             android:id="@+id/botton_nav"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/principalBoton"
-            app:itemIconTint="@color/bottom_nav_selector"
-            app:itemTextColor="@color/bottom_nav_selector"
+            android:background="@color/boton_principal"
             app:menu="@menu/menu_alumno"/>
 
     </LinearLayout>

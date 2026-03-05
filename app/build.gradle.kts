@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
+    id("com.google.devtools.ksp")
 }
 
 android {
@@ -40,7 +41,13 @@ android {
 }
 
 dependencies {
-
+    val roomVersion = "2.8.4"
+    implementation("androidx.room:room-runtime:2.8.4")
+    ksp("androidx.room:room-compiler:$roomVersion")
+    implementation("org.jsoup:jsoup:1.16.1")
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+    implementation("com.github.bumptech.glide:glide:5.0.5")
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)

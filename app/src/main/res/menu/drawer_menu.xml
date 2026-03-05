@@ -1,16 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <!-- Grupo de opciones solo una opcion puede estar seleccionada al mismo tiempo -->
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/nav_ajustes"
             android:icon="@drawable/outline_settings_24"
             android:title="Ajustes" />
+
         <item
             android:id="@+id/nav_stats"
             android:icon="@drawable/outline_bar_chart_4_bars_24"
             android:title="Estadísticas" />
+
         <item
             android:id="@+id/nav_soporte"
             android:icon="@drawable/outline_live_help_24"
@@ -22,14 +23,12 @@
 
     </group>
 
-    <!-- Item como titulo de seccion -->
-
     <item android:title="Otros">
         <menu>
             <item
                 android:id="@+id/nav_salir"
                 android:icon="@drawable/outline_logout_24"
-                android:title="Cerrar Sesion" />
+                android:title="Cerrar Sesión" />
         </menu>
     </item>
 

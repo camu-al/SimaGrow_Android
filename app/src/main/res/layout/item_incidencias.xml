@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="12dp"
+    android:layout_marginBottom="10dp"
+    android:clickable="true"
+    android:focusable="true"
+    android:foreground="?attr/selectableItemBackground"
+    app:cardCornerRadius="14dp"
+    app:cardElevation="6dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="12dp">
+
+        <!-- Imagen -->
+        <ImageView
+            android:id="@+id/imgIncidencia"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/baseline_report_problem_24"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <!-- Botón eliminar -->
+        <ImageButton
+            android:id="@+id/btnEliminar"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@drawable/baseline_delete_24"
+            app:tint="@color/estado_error"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <!-- Título -->
+        <TextView
+            android:id="@+id/tvTituloIncidencia"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Título de la Incidencia"
+            android:textColor="?attr/colorOnSurface"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:maxLines="1"
+            android:ellipsize="end"
+            app:layout_constraintStart_toEndOf="@id/imgIncidencia"
+            app:layout_constraintEnd_toStartOf="@id/btnEliminar"
+            app:layout_constraintTop_toTopOf="@id/imgIncidencia"
+            android:layout_marginStart="12dp"
+            android:layout_marginEnd="8dp"/>
+
+        <!-- Zona -->
+        <TextView
+            android:id="@+id/tvZona"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Zona: Aula 2B"
+            android:textColor="@color/texto_secundario"
+            android:textSize="12sp"
+            app:layout_constraintStart_toStartOf="@id/tvTituloIncidencia"
+            app:layout_constraintTop_toBottomOf="@id/tvTituloIncidencia"
+            app:layout_constraintEnd_toStartOf="@id/tvFecha"
+            android:layout_marginTop="4dp"/>
+
+        <!-- Fecha -->
+        <TextView
+            android:id="@+id/tvFecha"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="12/03/2026 10:30"
+            android:textColor="@color/texto_secundario"
+            android:textSize="11sp"
+            android:maxLines="1"
+            android:ellipsize="end"
+            app:layout_constraintStart_toEndOf="@id/tvZona"
+            app:layout_constraintTop_toTopOf="@id/tvZona"
+            app:layout_constraintBottom_toBottomOf="@id/tvZona"
+            android:layout_marginStart="8dp"/>
+
+
+        <!-- Tipo -->
+        <TextView
+            android:id="@+id/tvTipo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="ELÉCTRICO"
+            android:textColor="@color/tipo_incidencia"
+            android:textSize="11sp"
+            android:textStyle="bold"
+            android:background="@color/fondo_secundario"
+            android:paddingHorizontal="8dp"
+            android:paddingVertical="4dp"
+            android:layout_marginTop="6dp"
+            app:layout_constraintStart_toStartOf="@id/tvTituloIncidencia"
+            app:layout_constraintTop_toBottomOf="@id/tvZona"/>
+
+        <!-- Estado -->
+        <TextView
+            android:id="@+id/tvEstado"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="PENDIENTE"
+            android:textColor="@android:color/white"
+            android:textSize="10sp"
+            android:textStyle="bold"
+            android:background="@drawable/bg_estado_pendiente"
+            android:paddingHorizontal="8dp"
+            android:paddingVertical="4dp"
+            android:layout_marginStart="8dp"
+            app:layout_constraintStart_toEndOf="@id/tvTipo"
+            app:layout_constraintBaseline_toBaselineOf="@id/tvTipo"/>
+
+        <!-- Descripción -->
+        <TextView
+            android:id="@+id/tvDescripcionIncidencia"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Descripción breve de la incidencia..."
+            android:textColor="?attr/colorOnSurface"
+            android:textSize="13sp"
+            android:maxLines="2"
+            android:ellipsize="end"
+            android:layout_marginTop="8dp"
+            app:layout_constraintStart_toStartOf="@id/tvTituloIncidencia"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvTipo"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.cardview.widget.CardView>

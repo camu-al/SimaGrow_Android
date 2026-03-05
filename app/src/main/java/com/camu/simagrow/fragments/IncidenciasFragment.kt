@@ -5,56 +5,93 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.camu.simagrow.R
+import com.camu.simagrow.activitis.MainActivity
+import com.camu.simagrow.adapters.IncidenciaAdapter
+import com.camu.simagrow.database.AppDatabase
+import com.camu.simagrow.databinding.FragmentIncidenciasBinding
+import com.camu.simagrow.model.IncidenciaEntity
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import androidx.core.content.edit
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [IncidenciasFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class IncidenciasFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
+    private var _binding: FragmentIncidenciasBinding? = null
+    private val binding get() = _binding!!
+
+    private lateinit var db: AppDatabase
+    private lateinit var adapter: IncidenciaAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_incidencias, container, false)
+    ): View {
+        _binding = FragmentIncidenciasBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment IncidenciasFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            IncidenciasFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        db = AppDatabase.getDatabase(requireContext())
+
+        adapter = IncidenciaAdapter(emptyList()) { incidencia ->
+            eliminarIncidencia(incidencia)
+        }
+        binding.recyclerIncidencias.layoutManager = LinearLayoutManager(requireContext())
+        binding.recyclerIncidencias.adapter = adapter
+
+        cargarIncidencias()
+    }
+
+    private fun cargarIncidencias() {
+        val prefs = requireActivity().getSharedPreferences("usuario_prefs", AppCompatActivity.MODE_PRIVATE)
+        val nia = prefs.getString("nia", null) ?: return
+
+        lifecycleScope.launch(Dispatchers.IO) {
+            val listaIncidencias = db.incidenciaDao().obtenerIncidenciasPorUsuario(nia)
+
+            withContext(Dispatchers.Main) {
+                adapter.actualizarLista(listaIncidencias)
+                // Guardar contador
+                val prefs = requireActivity().getSharedPreferences("contador_prefs", AppCompatActivity.MODE_PRIVATE)
+                prefs.edit { putInt("total_incidencias", listaIncidencias.size) }
             }
+        }
+    }
+
+    private fun eliminarIncidencia(incidencia: IncidenciaEntity) {
+        lifecycleScope.launch(Dispatchers.IO) {
+            db.incidenciaDao().eliminarIncidencia(incidencia)
+            withContext(Dispatchers.Main) {
+                cargarIncidencias()
+            }
+        }
+    }
+
+    private fun animarContador(tv: TextView) {
+        tv.animate()
+            .scaleX(1.2f)
+            .scaleY(1.2f)
+            .setDuration(120)
+            .withEndAction {
+                tv.animate()
+                    .scaleX(1f)
+                    .scaleY(1f)
+                    .setDuration(120)
+                    .start()
+            }
+            .start()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

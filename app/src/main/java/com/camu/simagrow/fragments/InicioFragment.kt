@@ -1,60 +1,111 @@
 package com.camu.simagrow.fragments
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.camu.simagrow.R
+import com.camu.simagrow.activitis.MainActivity
+import com.camu.simagrow.adapters.NoticiaAdapter
+import com.camu.simagrow.databinding.FragmentInicioBinding
+import com.camu.simagrow.model.Noticia
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import org.jsoup.Jsoup
+import java.io.IOException
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [InicioFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class InicioFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
+    private var _binding: FragmentInicioBinding? = null
+    private val binding get() = _binding!!
+
+    private lateinit var noticiasAdapter: NoticiaAdapter
+    private val noticiasList = mutableListOf<Noticia>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_inicio, container, false)
+    ): View {
+        _binding = FragmentInicioBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment InicioFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            InicioFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        // Mostrar saludo personalizado
+        val prefs = requireActivity().getSharedPreferences("usuario_prefs", 0)
+        val nombreCompleto = prefs.getString("nombre", "Usuario") ?: "Usuario"
+        val nombre = nombreCompleto.split(" ")[0]
+        binding.tvBienvenida.text = "Bienvenido a SimaGrow, $nombre"
+
+        // Mostrar contador incidencias
+        val prefsContador = requireActivity().getSharedPreferences("contador_prefs", AppCompatActivity.MODE_PRIVATE)
+        val total = prefsContador.getInt("total_incidencias", 0)
+        val tvContador = view.findViewById<TextView>(R.id.tvContador)
+        tvContador.text = total.toString()
+
+        binding.cvCrearIncidencia.setOnClickListener {
+            (requireActivity() as MainActivity).cargarFragments(FormularioIncidenciasFragment())
+        }
+
+        binding.btnFormProfesor.setOnClickListener {
+            (requireActivity() as MainActivity).cargarFragments(FormularioMensajeFragment())
+        }
+
+        // Configurar RecyclerView
+        noticiasAdapter = NoticiaAdapter(noticiasList)
+        binding.recyclerViewNoticias.apply {
+            layoutManager = LinearLayoutManager(requireContext())
+            adapter = noticiasAdapter
+        }
+
+
+        // Cargar noticias con Jsoup
+        cargarNoticias()
+    }
+
+    private fun cargarNoticias() {
+        lifecycleScope.launch(Dispatchers.IO) {
+            try {
+                val url = "https://portal.edu.gva.es/ieslluissimarro/entrades/"
+                val doc = Jsoup.connect(url).get()
+
+                val noticiasTemp = mutableListOf<Noticia>()
+
+                doc.select("article").forEach { article ->
+                    val titulo = article.selectFirst("h2.entry-title")?.text() ?: "Sin título"
+                    val descripcion = article.selectFirst("div.entry-summary > p")?.text() ?: ""
+                    val enlace = article.selectFirst("div.post-image > a")?.attr("href") ?: ""
+                    val fecha = article.selectFirst("div.entry-meta time")?.attr("datetime") ?: ""
+                    val imagenUrl = article.selectFirst("div.post-image > a > img")?.attr("src") ?: ""
+
+                    noticiasTemp.add(Noticia(titulo, descripcion, enlace, fecha, imagenUrl))
+                }
+
+                withContext(Dispatchers.Main) {
+                    noticiasList.clear()
+                    noticiasList.addAll(noticiasTemp)
+                    noticiasAdapter.notifyDataSetChanged()
+                }
+
+            } catch (e: IOException) {
+                e.printStackTrace()
+                withContext(Dispatchers.Main) {
+                    Toast.makeText(context, "No se pudieron cargar las noticias", Toast.LENGTH_SHORT).show()
                 }
             }
+        }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

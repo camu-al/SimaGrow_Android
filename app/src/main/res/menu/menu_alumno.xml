@@ -10,7 +10,7 @@
         android:icon="@drawable/outline_home_24"/>
 
     <item
-        android:id="@+id/bottom_perfil"
-        android:title="Perfil"
-        android:icon="@drawable/outline_contacts_product_24"/>
+        android:id="@+id/bottom_MensajeProfe"
+        android:title="Mensajes"
+        android:icon="@drawable/outline_forward_to_inbox_24"/>
 </menu>

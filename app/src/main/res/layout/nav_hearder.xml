@@ -1,35 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Este layaout es el que sale arriba del todo en el menu desplegable-->
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="150dp"
-    android:orientation="vertical"
-    android:background="@color/secundarioBoton"
-    android:gravity="bottom"
+    android:layout_height="wrap_content"
+    android:minHeight="140dp"
+    android:orientation="horizontal"
+    android:background="@color/boton_secundario"
     android:padding="16dp"
+    android:gravity="center_vertical"
     android:theme="@style/ThemeOverlay.AppCompat.Dark">
 
+    <!-- FOTO -->
     <ImageView
-        android:layout_width="70dp"
-        android:layout_height="70dp"
-        android:src="@android:drawable/sym_def_app_icon"
-        android:contentDescription="Avatar"
-        />
+        android:id="@+id/imgPerfil"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_marginEnd="16dp"
+        android:src="@drawable/cade_foto_perfil"
+        android:contentDescription="Avatar" />
 
-    <TextView
-        android:layout_width="match_parent"
+    <!-- CONTENEDOR DE TEXTOS -->
+    <LinearLayout
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:paddingTop="8dp"
-        android:text="Alumno programador"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-        android:textStyle="bold"/>
+        android:layout_weight="1"
+        android:orientation="vertical">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="alumno@clase.com" />
+        <TextView
+            android:id="@+id/tvNombreUsuarioDrawer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Alex Camuñas Martínez"
+            android:textSize="16sp"
+            android:textStyle="bold" />
 
+        <TextView
+            android:id="@+id/tvNiaUsuarioDrawer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="NIA: 12345678"
+            android:textSize="14sp" />
 
+        <TextView
+            android:id="@+id/tvCursoUsuarioDrawer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="2 DAM"
+            android:textSize="14sp" />
+
+    </LinearLayout>
 
 </LinearLayout>

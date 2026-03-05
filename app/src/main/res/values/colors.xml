@@ -1,12 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="principal">#1F3D2B</color>
-    <color name="secundario">#4F6F5D</color>
-    <color name="principalBoton">#2F7D4E</color>
-    <color name="secundarioBoton">#5FAF7A</color>
-    <color name="fondo">#E6F5E9</color>
-    <color name="fondo2">#D4EEDF</color>
-    <color name="menu_normal">#E6F5E9</color>
-    <color name="menu_seleccionado">#1F3D2B</color>
+
+    <!-- Colores principales de marca -->
+    <color name="color_principal">#1F3D2B</color>
+    <color name="color_principal_variante">#2C4F39</color>
+    <color name="color_secundario">#4F6F5D</color>
+    <color name="color_secundario_variante">#6A8C78</color>
+
+    <!-- Fondos generales -->
+    <color name="fondo_principal">#EAF5EE</color>
+    <color name="fondo_secundario">#D9EDE1</color>
+
+    <!-- Tarjetas -->
+    <color name="fondo_tarjeta">#FFFFFF</color>
+    <color name="fondo_tarjeta_secundaria">#F2F7F4</color>
+    <color name="borde_tarjeta">#C7D8CC</color>
+
+    <!-- Botones -->
+    <color name="boton_principal">#2ECC71</color>
+    <color name="boton_principal_presionado">#276A42</color>
+    <color name="boton_secundario">#5FAF7A</color>
+    <color name="boton_secundario_presionado">#4F9466</color>
+
+    <!-- Texto -->
+    <color name="texto_principal">#1A1A1A</color>
+    <color name="texto_secundario">#4A4A4A</color>
+    <color name="texto_sobre_boton">#FFFFFF</color>
+    <color name="texto_sobre_tarjeta">#1F3D2B</color>
+
+    <!-- Menú inferior / navegación -->
+    <color name="menu_fondo_normal">#EAF5EE</color>
+    <color name="menu_fondo_seleccionado">#1F3D2B</color>
+    <color name="menu_texto_normal">#4A4A4A</color>
+    <color name="menu_texto_seleccionado">#FFFFFF</color>
+
+    <!-- Estados -->
+    <color name="estado_exito">#2F7D4E</color>
+    <color name="estado_advertencia">#E6A93A</color>
+    <color name="estado_error">#C94A4A</color>
+    <color name="tipo_incidencia">#0288D1</color>
+    <color name="texto_noticia_secundario">#888888</color>
 
 </resources>

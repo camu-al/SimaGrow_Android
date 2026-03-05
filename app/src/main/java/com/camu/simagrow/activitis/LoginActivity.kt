@@ -5,11 +5,17 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
+import com.camu.simagrow.database.AppDatabase
 import com.camu.simagrow.databinding.ActivityLoginBinding
+import kotlinx.coroutines.launch
+import android.util.Log
+import androidx.core.content.edit
 
 class LoginActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityLoginBinding
+    private lateinit var db: AppDatabase
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -18,39 +24,72 @@ class LoginActivity : AppCompatActivity() {
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        /*-------------------- BOTON INICIAR SESION  --------------------*/
-        binding.btnIniciarSesion.setOnClickListener {
-            val niaIntroducido = binding.etNia.text.toString().trim()
-            val passwordIntroducido = binding.etPassword.text.toString().trim()
+        db = AppDatabase.getDatabase(this)
 
-            if (niaIntroducido.isEmpty() || passwordIntroducido.isEmpty()) {
-                showToast("Rellena todos los campos")
+        binding.btnIniciarSesion.setOnClickListener {
+            val nia = binding.etNia.text.toString().trim()
+            val password = binding.etPassword.text.toString().trim()
+
+            // ---------------- VALIDACIONES ----------------
+            // Campos vacíos
+            if (nia.isEmpty() || password.isEmpty()) {
+                toast("Los campos son obligatorios")
                 return@setOnClickListener
             }
 
-            val niaRegistrado = intent.getStringExtra("NIA")
-            val passwordRegistrado = intent.getStringExtra("PASSWORD")
+            // NIA debe tener 8 números
+            if (!nia.matches(Regex("\\d{8}"))) {
+                toast("El NIA debe tener 8 números")
+                return@setOnClickListener
+            }
 
-            val loginCorrecto = niaIntroducido == niaRegistrado && passwordIntroducido == passwordRegistrado
+            // Contraseña mínima
+            if (password.length < 6) {
+                toast("La contraseña debe tener al menos 6 caracteres")
+                return@setOnClickListener
+            }
 
-            if (loginCorrecto) {
-                val intentMain = Intent(this, MainActivity::class.java)
-                startActivity(intentMain)
-                finish()
-            } else {
-                showToast("Los campos son incorrectos")
+            // ---------------- LOGIN ----------------
+            lifecycleScope.launch {
+                val usuario = db.usuarioDao().login(nia, password)
+
+                if (usuario != null) {
+                    Log.d("DEBUG_LOGIN", "Login correcto: $usuario")
+
+                    guardarUsuario(
+                        nia = usuario.nia,
+                        nombre = usuario.nombre,
+                        rol = usuario.rol,
+                        curso = usuario.curso
+                    )
+
+                    startActivity(Intent(this@LoginActivity, MainActivity::class.java))
+                    finish()
+                } else {
+                    Log.d("LOGIN", "Login fallido para NIA: $nia")
+                    toast("Credenciales incorrectas")
+                }
             }
         }
 
-        /*-------------------- BOTON CREAR CUENTA --------------------*/
-        binding.btnCrearCuenta.setOnClickListener {
-            val intentRegistro = Intent(this, RegistreActivity::class.java)
-            startActivity(intentRegistro)
+        binding.btnRegistro.setOnClickListener {
+            startActivity(Intent(this, RegistreActivity::class.java))
         }
     }
 
-    /*-------------------- FUNCIÓN TOAST --------------------*/
-    private fun showToast(mensaje: String) {
-        Toast.makeText(this, mensaje, Toast.LENGTH_SHORT).show()
+    // Toast
+    private fun toast(msg: String) {
+        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show()
+    }
+
+    // Guardar datos del usuario
+    fun guardarUsuario(nia: String, nombre: String, rol: String, curso: String?) {
+        val prefs = getSharedPreferences("usuario_prefs", MODE_PRIVATE)
+        prefs.edit {
+            putString("nia", nia)
+            putString("nombre", nombre)
+            putString("rol", rol)
+            putString("curso", curso)
+        }
     }
 }
