@@ -16,13 +16,6 @@ import retrofit2.http.Query
 
 interface SimaGrowApi {
 
-    // Login
-    @GET("usuaris/signInAndroid")
-    suspend fun loginPorNia(
-        @Query("nia") nia: String,
-        @Query("contrasena") contrasena: String
-    ): Response<UsuarioDTO>
-
     // Registro
     @FormUrlEncoded
     @POST("usuaris")
@@ -39,9 +32,13 @@ interface SimaGrowApi {
     @GET("usuaris")
     suspend fun getUsuarios(): List<UsuarioDTO>
 
-    // Lista incidencias
+    // Lista incidencias por nia
     @GET("incidencias/{nia}")
     suspend fun getIncidencias(@Path("nia") nia: Int): List<IncidenciaDTO>
+
+    // Lista incidencias
+    @GET("incidencias")
+    suspend fun getTodasIncidencias(): List<IncidenciaDTO>
 
     // Guardar incidencias
     @POST("incidencias")

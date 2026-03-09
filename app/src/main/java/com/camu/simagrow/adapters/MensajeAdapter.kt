@@ -5,6 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.camu.simagrow.R
 import com.camu.simagrow.model.MensajeEntity
@@ -18,42 +19,58 @@ class MensajeAdapter(
 ) : RecyclerView.Adapter<MensajeAdapter.ViewHolder>() {
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-
         val tvAsunto: TextView = view.findViewById(R.id.tvAsunto)
-        val tvProfesor: TextView = view.findViewById(R.id.tvProfesor)
+        val tvExtra: TextView = view.findViewById(R.id.tvExtra)   // Profesor o Alumno
         val tvFecha: TextView = view.findViewById(R.id.tvFecha)
         val tvMensaje: TextView = view.findViewById(R.id.tvMensaje)
         val btnEliminar: ImageButton = view.findViewById(R.id.btnBorrar)
     }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.item_mensaje, parent, false)
         return ViewHolder(view)
     }
+
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val mensaje = lista[position]
-        with(holder) {
-            tvAsunto.text = mensaje.asunto
-            tvProfesor.text = "Profesor: ${mensaje.profesor}"
-            val sdf = SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault())
-            tvFecha.text = sdf.format(Date(mensaje.fecha))
-            tvMensaje.text = mensaje.mensaje
 
-            btnEliminar.setOnClickListener {
-                val builder = androidx.appcompat.app.AlertDialog.Builder(itemView.context)
-                builder.setTitle("Eliminar mensaje")
-                builder.setMessage("¿Seguro que deseas eliminar este mensaje?")
+        // Obtener rol del usuario
+        val prefs = holder.itemView.context.getSharedPreferences("usuario_prefs", AppCompatActivity.MODE_PRIVATE)
+        val rol = prefs.getString("rol", "alumno")?.trim()?.lowercase()
 
-                builder.setPositiveButton("Eliminar") { _, _ ->
-                    onEliminarClick(mensaje)
-                }
+        // Asunto
+        holder.tvAsunto.text = mensaje.asunto
 
-                builder.setNegativeButton("Cancelar") { dialog, _ ->
-                    dialog.dismiss()
-                }
+        // Mostrar profesor o alumno según el rol
+        if (rol == "profesor") {
+            holder.tvExtra.text = "Alumno: ${mensaje.alumnoNombre} (NIA: ${mensaje.alumnoNia})"
+        } else {
+            holder.tvExtra.text = "Profesor: ${mensaje.profesor}"
+        }
 
-                builder.show()
+        // Fecha formateada
+        val sdf = SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault())
+        holder.tvFecha.text = sdf.format(Date(mensaje.fecha))
+
+        // Mensaje
+        holder.tvMensaje.text = mensaje.mensaje
+
+        // Botón eliminar
+        holder.btnEliminar.setOnClickListener {
+            val builder = androidx.appcompat.app.AlertDialog.Builder(holder.itemView.context)
+            builder.setTitle("Eliminar mensaje")
+            builder.setMessage("¿Seguro que deseas eliminar este mensaje?")
+
+            builder.setPositiveButton("Eliminar") { _, _ ->
+                onEliminarClick(mensaje)
             }
+
+            builder.setNegativeButton("Cancelar") { dialog, _ ->
+                dialog.dismiss()
+            }
+
+            builder.show()
         }
     }
 

@@ -7,17 +7,8 @@ import androidx.room.Index
 
 @Entity(
     tableName = "incidencias",
-    foreignKeys = [
-        ForeignKey(
-            entity = UsuarioEntity::class,
-            parentColumns = ["nia"],
-            childColumns = ["alumnoNia"],
-            onDelete = ForeignKey.CASCADE
-        )
-    ],
     indices = [Index(value = ["alumnoNia"])]
 )
-
 data class IncidenciaEntity(
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,
@@ -29,6 +20,7 @@ data class IncidenciaEntity(
     val estado: String = "Pendiente",
     val alumnoNia: String
 )
+
 
 
 

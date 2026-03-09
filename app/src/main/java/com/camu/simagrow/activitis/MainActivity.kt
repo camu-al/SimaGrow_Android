@@ -1,6 +1,7 @@
 package com.camu.simagrow.activitis
 
 import MusicaPrincipal
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
@@ -14,18 +15,14 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.view.GravityCompat
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.lifecycleScope
 import androidx.preference.PreferenceManager
 import com.camu.simagrow.R
 import com.camu.simagrow.database.AppDatabase
 import com.camu.simagrow.databinding.ActivityMainBinding
 import com.camu.simagrow.fragments.*
-import com.camu.simagrow.model.UsuarioEntity
 import com.google.android.material.navigation.NavigationView
-import kotlinx.coroutines.launch
 import androidx.core.content.edit
 import android.util.Log
-import com.camu.simagrow.fragments.SoporteFragment
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
@@ -33,13 +30,14 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private lateinit var musicaPrincipal: MusicaPrincipal
     private lateinit var prefs: SharedPreferences
     private lateinit var db: AppDatabase
+
+    private var niaUsuario: String = ""
+    private var nombreUsuario: String = "Usuario"
+    private var cursoUsuario: String = ""
+    private var rolUsuario: String = "alumno"
     private var isAlumno: Boolean = true
 
-    private var niaUsuario: String? = null
-    private var nombreUsuario: String? = null
-    private var cursoUsuario: String? = null
-    private var rolUsuario: String? = null
-
+    @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -49,18 +47,15 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         db = AppDatabase.getDatabase(this)
 
-        // -------------- MOSTRAR NOMBRE USUARIO DRAWER --------------
-        isAlumno = intent.getBooleanExtra("isAlumno", true)
+        // -------------- CARGAR USUARIO --------------
         cargarDatosUsuario()
-        val header = binding.navView.getHeaderView(0)
-        val tvNombreDrawer = header.findViewById<TextView>(R.id.tvNombreUsuarioDrawer)
-        val tvNia = header.findViewById<TextView>(R.id.tvNiaUsuarioDrawer)
-        val tvCurso = header.findViewById<TextView>(R.id.tvCursoUsuarioDrawer)
-        tvNombreDrawer.text = nombreUsuario
-        tvNia.text = "Nia: $niaUsuario"
-        tvCurso.text = "Curso: $cursoUsuario"
 
-        // -------------- MUSICA PRINCIPAL --------------
+        val header = binding.navView.getHeaderView(0)
+        header.findViewById<TextView>(R.id.tvNombreUsuarioDrawer).text = nombreUsuario
+        header.findViewById<TextView>(R.id.tvNiaUsuarioDrawer).text = "NIA: $niaUsuario"
+        header.findViewById<TextView>(R.id.tvCursoUsuarioDrawer).text = "Curso: $cursoUsuario"
+
+        // -------------- MUSICA --------------
         musicaPrincipal = MusicaPrincipal(this)
 
         // -------------- TOOLBAR --------------
@@ -71,29 +66,29 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         binding.bottonNav.menu.clear()
         if (isAlumno) {
             binding.bottonNav.inflateMenu(R.menu.menu_alumno)
-        }else{
+        } else {
             binding.bottonNav.inflateMenu(R.menu.menu_profesor)
         }
 
         binding.bottonNav.setOnItemSelectedListener { item ->
-            when(item.itemId){
-                // Alumno
-                R.id.bottom_Home -> { cargarFragments(InicioFragment()); true }
-                R.id.bottom_Incidencias -> { cargarFragments(IncidenciasFragment()); true }
-                R.id.bottom_MensajeProfe -> { cargarFragments(MensajePorfeFragment()); true }
-
-                // Profesor
-                /*R.id.bottom_HomeProfe -> { cargarFragments(InicioFragment()); true }
-                R.id.bottom_IncidenciasTotales -> { cargarFragments(IncidenciasFragment()); true }
-                R.id.bottom_Gestionar_Alumnos -> { cargarFragments(GestionAlumnosFragment()); true }
-                R.id.bottom_Mensaje_Alumnos -> { cargarFragments(MensajeProfeFragment()); true }
-                */
-
-                else -> false
+            if (isAlumno) {
+                when (item.itemId) {
+                    R.id.bottom_Home -> { cargarFragments(InicioFragment()); true }
+                    R.id.bottom_Incidencias -> { cargarFragments(IncidenciasFragment()); true }
+                    R.id.bottom_MensajeProfe -> { cargarFragments(MensajePorfeFragment()); true }
+                    else -> false
+                }
+            } else {
+                when (item.itemId) {
+                    R.id.bottom_HomeProfe -> { cargarFragments(InicioFragment()); true }
+                    R.id.bottom_IncidenciasTotales -> { cargarFragments(IncidenciasFragment()); true }
+                    R.id.bottom_Gestionar_Alumnos -> { cargarFragments(GestionAlumnosFragment()); true }
+                    else -> false
+                }
             }
         }
 
-        // --------------- Conf Menu Drawer ---------------
+        // --------------- DRAWER ---------------
         val toggle = ActionBarDrawerToggle(
             this,
             binding.drawerLayout,
@@ -105,45 +100,48 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         toggle.syncState()
         binding.navView.setNavigationItemSelectedListener(this)
 
-        // Cargar fragmento por defecto
+        if (!isAlumno) {
+            val menu = binding.navView.menu
+            menu.findItem(R.id.nav_soporte)?.isVisible = false
+        }
+
+        // -------------- FRAGMENTO INICIAL --------------
         if (savedInstanceState == null) {
             cargarFragments(InicioFragment())
-            if (isAlumno){
-                binding.bottonNav.selectedItemId = R.id.bottom_Home
-            } else
-                binding.bottonNav.selectedItemId = R.id.bottom_HomeProfe
+            binding.bottonNav.selectedItemId =
+                if (isAlumno) R.id.bottom_Home else R.id.bottom_HomeProfe
         }
 
-        // Modo oscuro
-        val modoOscuro: Boolean = PreferenceManager.getDefaultSharedPreferences(this).getBoolean("oscuro", false)
-        if (modoOscuro){
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-        } else {
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-        }
+        // -------------- MODO OSCURO --------------
+        val modoOscuro = PreferenceManager.getDefaultSharedPreferences(this)
+            .getBoolean("oscuro", false)
+
+        AppCompatDelegate.setDefaultNightMode(
+            if (modoOscuro) AppCompatDelegate.MODE_NIGHT_YES
+            else AppCompatDelegate.MODE_NIGHT_NO
+        )
     }
 
-    // --------------- FUNCIONES ---------------
     private fun cargarDatosUsuario() {
         prefs = getSharedPreferences("usuario_prefs", MODE_PRIVATE)
 
-        niaUsuario = prefs.getString("nia", "")
-        nombreUsuario = prefs.getString("nombre", "Usuario")
-        cursoUsuario = prefs.getString("curso", "")
+        niaUsuario = prefs.getString("nia", "") ?: ""
+        nombreUsuario = prefs.getString("nombre", "Usuario") ?: "Usuario"
+        cursoUsuario = prefs.getString("curso", "") ?: ""
+
         rolUsuario = prefs.getString("rol", "alumno")
+            ?.trim()
+            ?.lowercase()
+            ?: "alumno"
 
-        // CORRECCIÓN AQUÍ
-        isAlumno = rolUsuario?.trim()?.lowercase() == "alumno"
-
-        Log.d("MAIN", "Nombre usuario: $nombreUsuario")
-        Log.d("MAIN", "NIA usuario: $niaUsuario")
-        Log.d("MAIN", "Rol usuario: $rolUsuario")
-        Log.d("MAIN", "Curso usuario: $cursoUsuario")
-        Log.d("MAIN", "isAlumno: $isAlumno")
+        // Rol por defecto alumno
+        if (rolUsuario != "alumno" && rolUsuario != "profesor") {
+            rolUsuario = "alumno"
+        }
+        isAlumno = rolUsuario == "alumno"
     }
 
-
-    // Boton menu superiror
+    // Boton toolbar
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.menu_main, menu)
         return true
@@ -159,34 +157,62 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         }
     }
 
-    // Botones menu drawer
+    // Menu Bottom
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
-        when(item.itemId){
+        // Menu Drawer segun el rol
+        val permitido = when (rolUsuario) {
+            "alumno" -> itemPermitidoParaAlumno(item.itemId)
+            "profesor" -> itemPermitidoParaProfesor(item.itemId)
+            else -> false
+        }
+
+        if (!permitido) {
+            Toast.makeText(this, "Opción no disponible para tu rol", Toast.LENGTH_SHORT).show()
+            return true
+        }
+
+        when (item.itemId) {
             R.id.nav_info -> cargarFragments(AcercaDeFragment())
             R.id.nav_soporte -> cargarFragments(SoporteFragment())
-            R.id.nav_mensajeSoporte -> cargarFragments(GestionAlumnosFragment())
             R.id.nav_ajustes -> cargarFragments(AjustesFragment())
             R.id.nav_salir -> mostrarAlerta(
                 titulo = "Cerrar sesión",
                 mensaje = "¿Seguro que quieres cerrar sesión?"
-            ){
+            ) {
                 prefs.edit { clear() }
                 startActivity(Intent(this, LoginActivity::class.java))
                 finish()
             }
         }
+
         binding.drawerLayout.closeDrawer(GravityCompat.START)
         return true
+    }
+
+    // Items menu drawer alumno
+    private fun itemPermitidoParaAlumno(itemId: Int): Boolean {
+        return when (itemId) {
+            R.id.nav_info,
+            R.id.nav_soporte,
+            R.id.nav_ajustes,
+            R.id.nav_salir -> true
+            else -> false
+        }
+    }
+    // Items menu drawer Profesor
+    private fun itemPermitidoParaProfesor(itemId: Int): Boolean {
+        return when (itemId) {
+            R.id.nav_info,
+            R.id.nav_ajustes,
+            R.id.nav_salir -> true
+            else -> false
+        }
     }
 
     fun cargarFragments(fragment: Fragment) {
         supportFragmentManager.beginTransaction()
             .replace(R.id.contenedorFragments, fragment)
             .commit()
-    }
-
-    private fun showToast(msg: String){
-        Toast.makeText(this,msg,Toast.LENGTH_SHORT).show()
     }
 
     private fun mostrarAlerta(titulo:String, mensaje:String, accionConfirmar:()->Unit){
@@ -197,8 +223,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         builder.setNegativeButton("Cancelar"){ dialog,_ -> dialog.dismiss() }
         builder.show()
     }
+
     fun iniciarMusica() { musicaPrincipal.reproducirSnd(R.raw.lofi_music2) }
     fun pararMusica() { musicaPrincipal.detenerMusica() }
+
     override fun onStart() {
         super.onStart()
         val musicaActivada = PreferenceManager
@@ -206,9 +234,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             .getBoolean("musica", true)
         if (musicaActivada) iniciarMusica()
     }
+
     override fun onStop() {
         pararMusica()
         super.onStop()
     }
-
 }

@@ -2,6 +2,7 @@ package com.camu.simagrow.activitis
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -16,6 +17,7 @@ import com.camu.simagrow.model.UsuarioEntity
 class LoginActivity : AppCompatActivity() {
     private lateinit var binding: ActivityLoginBinding
     private lateinit var db: AppDatabase
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -39,7 +41,6 @@ class LoginActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            // -------------------- Login ------------------
             login(nia, password)
         }
 
@@ -48,25 +49,32 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
-    // LOGIN
     private fun login(nia: String, password: String) {
         lifecycleScope.launch {
             try {
                 val usuarios = RetroFitInstance.api.getUsuarios()
-                val usuarioDTO = usuarios.find { it.nia == nia.toInt() && it.password.equals(password, ignoreCase = true) }
+
+                val usuarioDTO = usuarios.find {
+                    it.nia == nia.toInt() &&
+                            it.password.equals(password, ignoreCase = true)
+                }
 
                 if (usuarioDTO != null) {
                     toast("Login correcto")
+                    Log.d("LOGIN", "ROL DEL SERVIDOR (DTO): '${usuarioDTO.rol}'")
+
                     val usuarioLocal = UsuarioEntity(
                         nia = usuarioDTO.nia.toString(),
                         nombre = usuarioDTO.nombre,
-                        rol = usuarioDTO.rol,
+                        rol = usuarioDTO.rol ?: "alumno",
                         curso = usuarioDTO.curso,
                         password = usuarioDTO.password,
                         materia = usuarioDTO.materia
                     )
 
+                    db.usuarioDao().borrarUsuarios()
                     db.usuarioDao().insertarUsuario(usuarioLocal)
+
                     abrirMain(usuarioLocal)
 
                 } else {
@@ -80,15 +88,27 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun abrirMain(usuario: UsuarioEntity) {
+
+        val prefs = getSharedPreferences("usuario_prefs", MODE_PRIVATE)
+        prefs.edit { clear() }
+
+        val rolNormalizado = usuario.rol
+            ?.replace("\"", "")
+            ?.trim()
+            ?.lowercase()
+            ?: "alumno"
+
+        Log.d("LOGIN", "ROL LOCAL (UsuarioEntity): '${usuario.rol}'")
+        Log.d("LOGIN", "ROL NORMALIZADO QUE VOY A GUARDAR: '$rolNormalizado'")
+
         guardarUsuario(
             nia = usuario.nia,
             nombre = usuario.nombre,
-            rol = usuario.rol,
+            rol = rolNormalizado,
             curso = usuario.curso
         )
 
-        val intent = Intent(this, MainActivity::class.java)
-        startActivity(intent)
+        startActivity(Intent(this, MainActivity::class.java))
         finish()
     }
 
@@ -98,10 +118,11 @@ class LoginActivity : AppCompatActivity() {
 
     fun guardarUsuario(nia: String, nombre: String, rol: String, curso: String?) {
         val prefs = getSharedPreferences("usuario_prefs", MODE_PRIVATE)
+        Log.d("LOGIN", "guardarUsuario() → rol recibido: '$rol'")
         prefs.edit {
             putString("nia", nia)
             putString("nombre", nombre)
-            putString("rol", rol.trim().lowercase())
+            putString("rol", rol.replace("\"", "").trim().lowercase())
             putString("curso", curso)
         }
     }

@@ -3,7 +3,7 @@ package com.camu.simagrow.model
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-@Entity
+@Entity(tableName = "mensajes")
 data class MensajeEntity(
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,
@@ -11,5 +11,7 @@ data class MensajeEntity(
     val mensaje: String,
     val profesor: String,
     val fecha: Long,
-    val alumnoNia: String
+    val alumnoNia: String,
+    val alumnoNombre: String
 )
+

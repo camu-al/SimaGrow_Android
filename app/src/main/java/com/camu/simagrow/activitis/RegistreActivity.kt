@@ -132,7 +132,6 @@ class RegistreActivity : AppCompatActivity() {
         }
     }
 
-
     fun UsuarioEntity.toDTO(): UsuarioDTO {
         return UsuarioDTO(
             nia = this.nia.toInt(),

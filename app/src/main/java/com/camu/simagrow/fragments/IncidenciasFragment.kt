@@ -53,50 +53,58 @@ class IncidenciasFragment : Fragment() {
             texto.substring(1, texto.length - 1)
         } else texto
     }
-
     private fun cargarIncidencias() {
         val prefs = requireActivity().getSharedPreferences("usuario_prefs", AppCompatActivity.MODE_PRIVATE)
-        val nia = prefs.getString("nia", null) ?: return
+        val nia = prefs.getString("nia", null)
+        val rol = prefs.getString("rol", "alumno")?.trim()?.lowercase()
+        Log.d("INCIDENCIAS", "ROL LEÍDO DE PREFS: '$rol'")
+        Log.d("INCIDENCIAS", "NIA LEÍDO DE PREFS: '$nia'")
+        Log.d("INCIDENCIAS", "¿ES PROFESOR? → ${rol == "profesor"}")
 
         lifecycleScope.launch(Dispatchers.IO) {
             try {
                 val api = RetroFitInstance.api
 
-                // Intentar cargar desde API
-                val incidenciasDTO = api.getIncidencias(nia.toInt())
+                val incidenciasDTO = if (rol == "alumno") {
+                    // Alumno
+                    api.getIncidencias(nia!!.toInt())
+                } else {
+                    // Profesor
+                    api.getTodasIncidencias()
+                }
 
-                // Convertir DTO a Entity
+                // Modelmapper
                 val incidenciasEntity = incidenciasDTO.map { dto ->
                     dto.toEntity().copy(
                         titulo = limpiarComillas(dto.nombre)
                     )
                 }
 
-                // Remplazar Room
+                // Guardar en Room
                 db.incidenciaDao().borrarTodas()
                 db.incidenciaDao().insertarIncidencias(incidenciasEntity)
 
-                Log.i("INCIDENCIAS_API", "Cargado desde API: ${incidenciasEntity.size}")
-
-                // Mostrar API
                 withContext(Dispatchers.Main) {
                     adapter.actualizarLista(incidenciasEntity)
                 }
 
-                return@launch
-
             } catch (e: Exception) {
-                Log.e("INCIDENCIAS_API", "Servidor NO disponible, usando Room. Error: ${e.message}")
-            }
+                Log.e("INCIDENCIAS_API", "Error API: ${e.message}")
 
-            // Si API falla → cargar Room
-            val listaRoom = db.incidenciaDao().obtenerIncidenciasAlumno(nia)
+                // Cargar room por defecto
+                val listaRoom = if (rol == "alumno") {
+                    db.incidenciaDao().obtenerIncidenciasAlumno(nia!!)
+                } else {
+                    db.incidenciaDao().obtenerTodas()
+                }
 
-            withContext(Dispatchers.Main) {
-                adapter.actualizarLista(listaRoom)
+                withContext(Dispatchers.Main) {
+                    adapter.actualizarLista(listaRoom)
+                }
             }
         }
     }
+
 
     // ModelMapper DTO a Entity
     fun IncidenciaDTO.toEntity(): IncidenciaEntity {
@@ -116,22 +124,26 @@ class IncidenciasFragment : Fragment() {
         lifecycleScope.launch(Dispatchers.IO) {
             try {
                 RetroFitInstance.api.eliminarIncidenciaServidor(incidencia.id)
-            } catch (_: Exception) {
-
-            }
+            } catch (_: Exception) {}
 
             db.incidenciaDao().eliminarIncidencia(incidencia)
 
             val prefs = requireActivity().getSharedPreferences("usuario_prefs", AppCompatActivity.MODE_PRIVATE)
-            val nia = prefs.getString("nia", null) ?: return@launch
+            val nia = prefs.getString("nia", null)
+            val rol = prefs.getString("rol", "alumno")?.trim()?.lowercase()
 
-            val listaRoom = db.incidenciaDao().obtenerIncidenciasAlumno(nia)
+            val listaRoom = if (rol == "profesor") {
+                db.incidenciaDao().obtenerTodas()
+            } else {
+                db.incidenciaDao().obtenerIncidenciasAlumno(nia!!)
+            }
 
             withContext(Dispatchers.Main) {
                 adapter.actualizarLista(listaRoom)
             }
         }
     }
+
 
     override fun onDestroyView() {
         super.onDestroyView()

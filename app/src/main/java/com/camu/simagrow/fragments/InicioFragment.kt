@@ -42,46 +42,64 @@ class InicioFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         db = AppDatabase.getDatabase(requireContext())
 
-        // Mostrar saludo personalizado
+        // Saludo personalizado
         val prefs = requireActivity().getSharedPreferences("usuario_prefs", 0)
         val nombreCompleto = prefs.getString("nombre", "Usuario") ?: "Usuario"
         val nombre = nombreCompleto.split(" ")[0]
         binding.tvBienvenida.text = "Bienvenido a SimaGrow, $nombre"
 
-        // Mostrar contador incidencias
+        // Rol del usuario
+        val rol = prefs.getString("rol", "alumno")?.trim()?.lowercase()
+
+        // Rol porfesor
+        if (rol == "profesor") {
+
+            // Cambiar textos
+            binding.cvFormularioProfe.findViewById<TextView>(R.id.tvFormularioTitulo).text = "Mensajes de alumnos"
+            binding.cvFormularioProfe.findViewById<TextView>(R.id.tvFormularioDescripcion).text = "Consulta los mensajes enviados por tus alumnos"
+
+            // Cambiar texto del boton
+            binding.btnFormProfesor.text = "Ver mensajes"
+
+            binding.btnFormProfesor.setOnClickListener {
+                (requireActivity() as MainActivity).cargarFragments(MensajePorfeFragment())
+            }
+
+        } else {
+
+            // Alumno → comportamiento normal
+            binding.btnFormProfesor.setOnClickListener {
+                (requireActivity() as MainActivity).cargarFragments(FormularioMensajeFragment())
+            }
+        }
+
+        // Contador incidencia
         val prefsContador = requireActivity().getSharedPreferences("contador_prefs", AppCompatActivity.MODE_PRIVATE)
         val total = prefsContador.getInt("total_incidencias", 0)
-        val tvContador = view.findViewById<TextView>(R.id.tvContador)
-        tvContador.text = total.toString()
+        binding.tvContador.text = total.toString()
 
-        // Boton ir formulario incidencias
+        // Boton crear incidencia
         binding.cvCrearIncidencia.setOnClickListener {
             (requireActivity() as MainActivity).cargarFragments(FormularioIncidenciasFragment())
         }
 
-        // Boton ir formulario mensje profesor
-        binding.btnFormProfesor.setOnClickListener {
-            (requireActivity() as MainActivity).cargarFragments(FormularioMensajeFragment())
-        }
-
-        // Configurar RecyclerView
+        // Recycleview noticias
         noticiasAdapter = NoticiaAdapter(noticiasList)
         binding.recyclerViewNoticias.apply {
             layoutManager = LinearLayoutManager(requireContext())
             adapter = noticiasAdapter
         }
 
-        // Cargar noticias con Jsoup
         cargarNoticias()
     }
 
-    // Actualizar contador en onResume
     private fun cargarContador() {
         lifecycleScope.launch {
             val total = db.incidenciaDao().contarIncidencias()
             binding.tvContador.text = total.toString()
         }
     }
+
     private fun cargarNoticias() {
         lifecycleScope.launch(Dispatchers.IO) {
             try {

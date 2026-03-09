@@ -22,7 +22,11 @@ class MensajePorfeFragment : Fragment() {
     private lateinit var db: AppDatabase
     private lateinit var adapter: MensajeAdapter
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
         _binding = FragmentMensajePorfeBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -31,13 +35,28 @@ class MensajePorfeFragment : Fragment() {
         db = AppDatabase.getDatabase(requireContext())
 
         adapter = MensajeAdapter(emptyList()) { mensaje ->
-            // Datos usuario
             val prefs = requireActivity().getSharedPreferences("usuario_prefs", AppCompatActivity.MODE_PRIVATE)
-            val nia = prefs.getString("nia", null) ?: return@MensajeAdapter
+            val rol = prefs.getString("rol", "alumno")?.trim()?.lowercase()
+            val nia = prefs.getString("nia", null)
 
             lifecycleScope.launch(Dispatchers.IO) {
-                db.mensajeDao().borrarMensajePorIdYNia(mensaje.id, nia)
-                cargarMensajes()
+
+                // BORRAR SEGÚN ROL
+                if (rol == "profesor") {
+                    db.mensajeDao().borrarMensajePorId(mensaje.id)
+                } else {
+                    db.mensajeDao().borrarMensajePorIdYNia(mensaje.id, nia!!)
+                }
+
+                val mensajesActualizados = if (rol == "profesor") {
+                    db.mensajeDao().obtenerTodosLosMensajes()
+                } else {
+                    db.mensajeDao().obtenerMensajesPorAlumno(nia!!)
+                }
+
+                withContext(Dispatchers.Main) {
+                    adapter.actualizarLista(mensajesActualizados)
+                }
             }
         }
 
@@ -50,12 +69,24 @@ class MensajePorfeFragment : Fragment() {
     private fun cargarMensajes() {
         val prefs = requireActivity().getSharedPreferences("usuario_prefs", AppCompatActivity.MODE_PRIVATE)
         val nia = prefs.getString("nia", null) ?: return
+        val rol = prefs.getString("rol", "alumno")?.trim()?.lowercase()
 
         lifecycleScope.launch(Dispatchers.IO) {
-            val mensajes = db.mensajeDao().obtenerMensajesPorAlumno(nia)
+
+            val mensajes = if (rol == "profesor") {
+                db.mensajeDao().obtenerTodosLosMensajes()
+            } else {
+                db.mensajeDao().obtenerMensajesPorAlumno(nia)
+            }
+
             withContext(Dispatchers.Main) {
                 adapter.actualizarLista(mensajes)
             }
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

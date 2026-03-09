@@ -18,4 +18,8 @@ interface UsuarioDao {
     @Query("SELECT * FROM usuarios")
     suspend fun getAllUsuarios(): UsuarioEntity?
 
+    @Query("DELETE FROM usuarios")
+    suspend fun borrarUsuarios()
+
+
 }

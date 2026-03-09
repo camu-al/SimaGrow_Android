@@ -100,22 +100,24 @@
                     <ImageView
                         android:layout_width="32dp"
                         android:layout_height="32dp"
-                        android:contentDescription="Pokemon Random"
+                        android:contentDescription="Mensaje"
                         android:src="@drawable/outline_forward_to_inbox_24"
                         app:tint="?attr/colorOnBackground" />
 
                     <TextView
+                        android:id="@+id/tvFormularioTitulo"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Formulario "
+                        android:text="Formulario"
                         android:textColor="@color/texto_principal"
                         android:textSize="14sp"
                         android:textStyle="bold" />
 
                     <TextView
+                        android:id="@+id/tvFormularioDescripcion"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Quieres enviar un mensaje a tu profesor?"
+                        android:text="¿Quieres enviar un mensaje a tu profesor?"
                         android:textColor="@color/texto_principal"
                         android:textSize="12sp"
                         android:textStyle="bold" />
@@ -127,11 +129,12 @@
                         android:layout_marginTop="15dp"
                         android:backgroundTint="@color/boton_principal"
                         android:gravity="center"
-                        android:text="ir"
+                        android:text="Ir"
                         android:textColor="@color/texto_sobre_boton" />
 
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
+
 
             <LinearLayout
                 android:layout_width="wrap_content"

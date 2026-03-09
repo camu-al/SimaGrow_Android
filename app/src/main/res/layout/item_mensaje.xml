@@ -6,54 +6,61 @@
     android:layout_height="wrap_content"
     android:layout_marginBottom="8dp"
     app:cardBackgroundColor="@color/fondo_tarjeta"
-    app:cardElevation="2dp"
+    app:cardElevation="3dp"
     app:cardUseCompatPadding="true">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="12dp">
+        android:padding="14dp">
 
         <TextView
             android:id="@+id/tvAsunto"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:text="Asunto"
             android:textStyle="bold"
-            android:textColor="@color/texto_principal"
-            android:text="Asunto"/>
+            android:textSize="18sp"
+            android:textColor="@color/texto_principal"/>
 
         <TextView
-            android:id="@+id/tvProfesor"
+            android:id="@+id/tvExtra"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:text="Profesor / Alumno"
+            android:textSize="14sp"
             android:textColor="@color/texto_secundario"
-            android:text="Profesor"/>
+            android:paddingTop="4dp"/>
 
         <TextView
             android:id="@+id/tvFecha"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:text="Fecha"
             android:textSize="12sp"
             android:textColor="@color/texto_secundario"
-            android:text="Fecha"/>
+            android:paddingTop="4dp"/>
 
         <TextView
             android:id="@+id/tvMensaje"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:text="Mensaje"/>
+            android:text="Mensaje"
+            android:textSize="16sp"
+            android:textColor="@color/texto_principal"
+            android:paddingTop="8dp"/>
 
         <ImageButton
             android:id="@+id/btnBorrar"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
             android:src="@drawable/baseline_delete_24"
             android:background="@android:color/transparent"
+            android:layout_gravity="end"
+            android:padding="4dp"
             app:tint="@color/boton_principal"
-            android:layout_gravity="end"/>
-
+            android:layout_marginTop="10dp"/>
 
     </LinearLayout>
 

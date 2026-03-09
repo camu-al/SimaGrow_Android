@@ -42,29 +42,31 @@ class FormularioMensajeFragment : Fragment() {
             // Datos usuario
             val prefs = requireActivity().getSharedPreferences("usuario_prefs", AppCompatActivity.MODE_PRIVATE)
             val nia = prefs.getString("nia", null)
+            val nombreAlumno = prefs.getString("nombre", null)
 
-            if (nia == null) {
+            if (nia == null || nombreAlumno == null) {
                 Toast.makeText(requireContext(), "Error de sesión", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
-            // Enviar mensaje
-            enviarMensajeProfe(asunto,mensaje,profesor,nia)
+            enviarMensajeProfe(asunto, mensaje, profesor, nia, nombreAlumno)
         }
     }
-    private fun enviarMensajeProfe(asunto: String, mensaje: String, profesor: String, nia: String) {
+
+    private fun enviarMensajeProfe(asunto: String, mensaje: String, profesor: String, nia: String, alumnoNombre: String) {
+
         val mensajeEntity = MensajeEntity(
             asunto = asunto,
             mensaje = mensaje,
             profesor = profesor,
             fecha = System.currentTimeMillis(),
-            alumnoNia = nia
+            alumnoNia = nia,
+            alumnoNombre = alumnoNombre
         )
 
         lifecycleScope.launch(Dispatchers.IO) {
             db.mensajeDao().insertarMensaje(mensajeEntity)
 
-            // Limpiar formulario
             withContext(Dispatchers.Main) {
                 Toast.makeText(requireContext(), "Mensaje enviado", Toast.LENGTH_SHORT).show()
                 binding.etProfesor.setText("")
