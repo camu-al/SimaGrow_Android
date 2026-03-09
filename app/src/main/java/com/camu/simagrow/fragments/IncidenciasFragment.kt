@@ -65,14 +65,14 @@ class IncidenciasFragment : Fragment() {
                 // Intentar cargar desde API
                 val incidenciasDTO = api.getIncidencias(nia.toInt())
 
-                // Convertir DTO → Entity + limpiar comillas
+                // Convertir DTO a Entity
                 val incidenciasEntity = incidenciasDTO.map { dto ->
                     dto.toEntity().copy(
                         titulo = limpiarComillas(dto.nombre)
                     )
                 }
 
-                // REEMPLAZAR Room (no añadir)
+                // Remplazar Room
                 db.incidenciaDao().borrarTodas()
                 db.incidenciaDao().insertarIncidencias(incidenciasEntity)
 
@@ -116,7 +116,9 @@ class IncidenciasFragment : Fragment() {
         lifecycleScope.launch(Dispatchers.IO) {
             try {
                 RetroFitInstance.api.eliminarIncidenciaServidor(incidencia.id)
-            } catch (_: Exception) {}
+            } catch (_: Exception) {
+
+            }
 
             db.incidenciaDao().eliminarIncidencia(incidencia)
 

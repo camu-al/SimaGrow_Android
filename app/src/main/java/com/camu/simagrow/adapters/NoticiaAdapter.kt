@@ -34,7 +34,6 @@ class NoticiaAdapter(private val noticias: List<Noticia>) :
             .inflate(R.layout.item_noticia, parent, false)
         return NoticiaViewHolder(view)
     }
-
     override fun onBindViewHolder(holder: NoticiaViewHolder, position: Int) {
         val noticia = noticias[position]
         with(holder){
@@ -56,9 +55,7 @@ class NoticiaAdapter(private val noticias: List<Noticia>) :
         }
 
     }
-
     override fun getItemCount(): Int = noticias.size
-
     fun formatearFecha(fechaOriginal: String): String {
         return try {
             val inputFormat = if (fechaOriginal.contains("T")) {
@@ -77,7 +74,6 @@ class NoticiaAdapter(private val noticias: List<Noticia>) :
             fechaOriginal
         }
     }
-
 
     fun resumirTextoNoticia(texto: String, maxChars: Int = 120): String {
         return if (texto.length > maxChars) {

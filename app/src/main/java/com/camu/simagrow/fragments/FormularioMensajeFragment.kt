@@ -63,6 +63,8 @@ class FormularioMensajeFragment : Fragment() {
 
         lifecycleScope.launch(Dispatchers.IO) {
             db.mensajeDao().insertarMensaje(mensajeEntity)
+
+            // Limpiar formulario
             withContext(Dispatchers.Main) {
                 Toast.makeText(requireContext(), "Mensaje enviado", Toast.LENGTH_SHORT).show()
                 binding.etProfesor.setText("")

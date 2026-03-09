@@ -75,6 +75,7 @@ class InicioFragment : Fragment() {
         cargarNoticias()
     }
 
+    // Actualizar contador en onResume
     private fun cargarContador() {
         lifecycleScope.launch {
             val total = db.incidenciaDao().contarIncidencias()

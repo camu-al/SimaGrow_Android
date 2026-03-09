@@ -48,8 +48,7 @@ class MensajePorfeFragment : Fragment() {
     }
 
     private fun cargarMensajes() {
-        val prefs = requireActivity()
-            .getSharedPreferences("usuario_prefs", AppCompatActivity.MODE_PRIVATE)
+        val prefs = requireActivity().getSharedPreferences("usuario_prefs", AppCompatActivity.MODE_PRIVATE)
         val nia = prefs.getString("nia", null) ?: return
 
         lifecycleScope.launch(Dispatchers.IO) {

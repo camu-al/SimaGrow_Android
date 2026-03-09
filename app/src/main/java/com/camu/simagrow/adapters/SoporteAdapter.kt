@@ -30,10 +30,13 @@ class SoporteAdapter(private val lista: List<SoporteEntity>) :
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = lista[position]
 
-        holder.nombre.text = item.nombre
-        holder.nia.text = "NIA: ${item.nia}"
-        holder.asunto.text = item.asunto
-        holder.mensaje.text = item.mensaje
-        holder.fecha.text = item.fecha
+        with(holder){
+            nombre.text = item.nombre
+            nia.text = "NIA: ${item.nia}"
+            asunto.text = item.asunto
+            mensaje.text = item.mensaje
+            fecha.text = item.fecha
+        }
+
     }
 }

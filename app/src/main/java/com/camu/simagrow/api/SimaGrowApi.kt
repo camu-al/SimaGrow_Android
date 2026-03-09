@@ -16,6 +16,7 @@ import retrofit2.http.Query
 
 interface SimaGrowApi {
 
+    // Registro
     @FormUrlEncoded
     @POST("usuaris")
     suspend fun registrarUsuario(
@@ -27,15 +28,18 @@ interface SimaGrowApi {
         @Field("materia") materia: String
     ): Response<UsuarioDTO>
 
+    // Login
     @GET("usuaris/signIn2")
     suspend fun loginPorNia(
         @Query("nia") nia: String,
         @Query("contrasena") contrasena: String
     ): Response<UsuarioDTO>
 
+    // Lista incidencias
     @GET("incidencias/{nia}")
     suspend fun getIncidencias(@Path("nia") nia: Int): List<IncidenciaDTO>
 
+    // Guardar incidencias
     @POST("incidencias")
     suspend fun crearIncidencia(
         @Body nombre: RequestBody,
@@ -47,6 +51,7 @@ interface SimaGrowApi {
         @Query("estado") estado: String
     ): Response<IncidenciaDTO>
 
+    // Eliminar incidencia
     @DELETE("incidencias/eliminar/{id}")
     suspend fun eliminarIncidenciaServidor(@Path("id") id: Int)
 

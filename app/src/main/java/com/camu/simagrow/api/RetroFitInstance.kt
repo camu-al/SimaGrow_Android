@@ -5,7 +5,6 @@ import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.converter.scalars.ScalarsConverterFactory
 
 object RetroFitInstance {
-
     private const val BASE_URL = "http://20.111.17.43/simagrow/"
 
     val api: SimaGrowApi by lazy {

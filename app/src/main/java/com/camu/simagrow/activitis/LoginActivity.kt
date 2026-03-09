@@ -13,10 +13,8 @@ import androidx.core.content.edit
 import com.camu.simagrow.model.UsuarioEntity
 
 class LoginActivity : AppCompatActivity() {
-
     private lateinit var binding: ActivityLoginBinding
     private lateinit var db: AppDatabase
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
