@@ -11,6 +11,10 @@ import com.camu.simagrow.databinding.ActivityRegistreBinding
 import com.camu.simagrow.model.UsuarioEntity
 import kotlinx.coroutines.launch
 import android.util.Log
+import com.camu.simagrow.api.RetroFitInstance
+import com.camu.simagrow.model.dto.UsuarioDTO
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 class RegistreActivity : AppCompatActivity() {
 
@@ -70,36 +74,74 @@ class RegistreActivity : AppCompatActivity() {
             }
 
             // ---------------- REGISTRAR USUARIO ----------------
-            lifecycleScope.launch {
-                val usuarioExistente = db.usuarioDao().obtenerUsuarioPorNia(nia)
-                if (usuarioExistente != null) {
-                    toast("Este NIA ya está registrado")
-                    return@launch
-                }
-
-                val usuario = UsuarioEntity(
-                    nia = nia,
-                    nombre = nombre,
-                    password = password,
-                    rol = "alumno",
-                    curso = curso,
-                    materia = null
-                )
-
-                try {
-                    db.usuarioDao().insertarUsuario(usuario)
-                    toast("Usuario registrado correctamente")
-                    finish()
-                } catch (e: Exception) {
-                    Log.e("REGISTRO", "Error al insertar usuario: ${e.message}")
-                    toast("Error al registrar usuario")
-                }
-            }
+            registrarUsuario(nombre,nia,password, curso)
         }
 
         binding.btnVolver.setOnClickListener {
             finish()
         }
+    }
+
+    private fun registrarUsuario(nombre: String, nia: String, password: String, curso: String) {
+        lifecycleScope.launch(Dispatchers.IO) {
+
+            val usuario = UsuarioEntity(
+                nia = nia,
+                nombre = nombre,
+                password = password,
+                rol = "alumno",
+                curso = curso,
+                materia = null
+            )
+
+            var registradoEnServidor = false
+
+            try {
+                // Intentar registrar en servidor
+                val response = RetroFitInstance.api.registrarUsuario(
+                    nia = nia.toInt(),
+                    nombre = nombre,
+                    password = password,
+                    rol = "alumno",
+                    curso = curso,
+                    materia = ""
+                )
+
+                if (response.isSuccessful) {
+                    Log.i("REGISTRO", "Usuario registrado en servidor")
+                    registradoEnServidor = true
+                } else {
+                    Log.e("REGISTRO", "Error del servidor: ${response.code()}")
+                }
+
+            } catch (e: Exception) {
+                Log.e("REGISTRO", "Servidor NO disponible: ${e.message}")
+            }
+
+            // Guardar en Room
+            db.usuarioDao().insertarUsuario(usuario)
+
+            withContext(Dispatchers.Main) {
+                if (registradoEnServidor) {
+                    toast("Usuario registrado en servidor y guardado localmente")
+                } else {
+                    toast("Servidor no disponible. Usuario guardado localmente")
+                }
+                finish()
+            }
+        }
+    }
+
+
+    fun UsuarioEntity.toDTO(): UsuarioDTO {
+        return UsuarioDTO(
+            nia = this.nia.toInt(),
+            nombre = this.nombre,
+            password = this.password,
+            rol = this.rol,
+            curso = this.curso,
+            materia = this.materia
+        )
     }
 
     private fun toast(msg: String) {

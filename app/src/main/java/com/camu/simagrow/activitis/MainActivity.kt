@@ -52,7 +52,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         // -------------- MOSTRAR NOMBRE USUARIO DRAWER --------------
         isAlumno = intent.getBooleanExtra("isAlumno", true)
         cargarDatosUsuario()
-        val header = binding.navView.getHeaderView(0) // obtiene el header del NavigationView
+        val header = binding.navView.getHeaderView(0)
         val tvNombreDrawer = header.findViewById<TextView>(R.id.tvNombreUsuarioDrawer)
         val tvNia = header.findViewById<TextView>(R.id.tvNiaUsuarioDrawer)
         val tvCurso = header.findViewById<TextView>(R.id.tvCursoUsuarioDrawer)
@@ -83,7 +83,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 R.id.bottom_MensajeProfe -> { cargarFragments(MensajePorfeFragment()); true }
 
                 // Profesor
-
                 /*R.id.bottom_HomeProfe -> { cargarFragments(InicioFragment()); true }
                 R.id.bottom_IncidenciasTotales -> { cargarFragments(IncidenciasFragment()); true }
                 R.id.bottom_Gestionar_Alumnos -> { cargarFragments(GestionAlumnosFragment()); true }
@@ -183,7 +182,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             .replace(R.id.contenedorFragments, fragment)
             .commit()
     }
-
 
     private fun showToast(msg: String){
         Toast.makeText(this,msg,Toast.LENGTH_SHORT).show()

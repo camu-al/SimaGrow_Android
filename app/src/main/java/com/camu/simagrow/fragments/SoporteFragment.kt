@@ -30,9 +30,7 @@ class SoporteFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-
         binding.btnEnviarMensajeSoporte.setOnClickListener {
-
             val asunto = binding.etAsuntoSoporte.text.toString()
             val mensaje = binding.etMensajeSoporte.text.toString()
 
@@ -42,27 +40,29 @@ class SoporteFragment : Fragment() {
             }
 
             val fechaActual = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(Date())
+            // Datos usuario
             val prefs = requireActivity().getSharedPreferences("usuario_prefs", AppCompatActivity.MODE_PRIVATE)
             val nombreUsuario = prefs.getString("nombre", "Desconocido") ?: "Desconocido"
             val niaUsuario = prefs.getString("nia", "----") ?: "----"
 
-            val soporte = SoporteEntity(
-                nombre = nombreUsuario,
-                nia = niaUsuario,
-                asunto = asunto,
-                mensaje = mensaje,
-                fecha = fechaActual
-            )
+            enviarMensajeSoporteRoom(nombreUsuario, niaUsuario, asunto, mensaje, fechaActual)
+        }
+    }
 
-            lifecycleScope.launch(Dispatchers.IO) {
-                AppDatabase.getDatabase(requireContext()).soporteDao().insertarMensajeSoporte(soporte)
-            }
+    private fun enviarMensajeSoporteRoom(nombreUsuario: String, niaUsuario: String, asunto: String, mensaje: String, fechaActual: String) {
+        val soporte = SoporteEntity(
+            nombre = nombreUsuario,
+            nia = niaUsuario,
+            asunto = asunto,
+            mensaje = mensaje,
+            fecha = fechaActual
+        )
 
-            Toast.makeText(requireContext(), "Mensaje enviado a soporte", Toast.LENGTH_SHORT).show()
+        lifecycleScope.launch(Dispatchers.IO) {
+            AppDatabase.getDatabase(requireContext()).soporteDao().insertarMensajeSoporte(soporte)
         }
 
-
-
+        Toast.makeText(requireContext(), "Mensaje enviado a soporte", Toast.LENGTH_SHORT).show()
 
     }
 

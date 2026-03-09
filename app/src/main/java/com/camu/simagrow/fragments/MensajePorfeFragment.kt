@@ -31,8 +31,8 @@ class MensajePorfeFragment : Fragment() {
         db = AppDatabase.getDatabase(requireContext())
 
         adapter = MensajeAdapter(emptyList()) { mensaje ->
-            val prefs = requireActivity()
-                .getSharedPreferences("usuario_prefs", AppCompatActivity.MODE_PRIVATE)
+            // Datos usuario
+            val prefs = requireActivity().getSharedPreferences("usuario_prefs", AppCompatActivity.MODE_PRIVATE)
             val nia = prefs.getString("nia", null) ?: return@MensajeAdapter
 
             lifecycleScope.launch(Dispatchers.IO) {

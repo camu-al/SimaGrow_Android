@@ -28,8 +28,8 @@ class GestionAlumnosFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
+        // Lista de mensaje soporte
         binding.recyclerSoporte.layoutManager = LinearLayoutManager(requireContext())
-
         lifecycleScope.launch(Dispatchers.IO) {
             val lista = AppDatabase.getDatabase(requireContext()).soporteDao().obtenerMensajesSoporte()
             withContext(Dispatchers.Main) {

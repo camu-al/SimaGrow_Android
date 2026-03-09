@@ -39,8 +39,8 @@ class FormularioMensajeFragment : Fragment() {
                 return@setOnClickListener
             }
 
-            val prefs = requireActivity()
-                .getSharedPreferences("usuario_prefs", AppCompatActivity.MODE_PRIVATE)
+            // Datos usuario
+            val prefs = requireActivity().getSharedPreferences("usuario_prefs", AppCompatActivity.MODE_PRIVATE)
             val nia = prefs.getString("nia", null)
 
             if (nia == null) {
@@ -48,22 +48,26 @@ class FormularioMensajeFragment : Fragment() {
                 return@setOnClickListener
             }
 
-            val mensajeEntity = MensajeEntity(
-                asunto = asunto,
-                mensaje = mensaje,
-                profesor = profesor,
-                fecha = System.currentTimeMillis(),
-                alumnoNia = nia
-            )
+            // Enviar mensaje
+            enviarMensajeProfe(asunto,mensaje,profesor,nia)
+        }
+    }
+    private fun enviarMensajeProfe(asunto: String, mensaje: String, profesor: String, nia: String) {
+        val mensajeEntity = MensajeEntity(
+            asunto = asunto,
+            mensaje = mensaje,
+            profesor = profesor,
+            fecha = System.currentTimeMillis(),
+            alumnoNia = nia
+        )
 
-            lifecycleScope.launch(Dispatchers.IO) {
-                db.mensajeDao().insertarMensaje(mensajeEntity)
-                withContext(Dispatchers.Main) {
-                    Toast.makeText(requireContext(), "Mensaje enviado", Toast.LENGTH_SHORT).show()
-                    binding.etProfesor.setText("")
-                    binding.etAsunto.setText("")
-                    binding.etMensaje.setText("")
-                }
+        lifecycleScope.launch(Dispatchers.IO) {
+            db.mensajeDao().insertarMensaje(mensajeEntity)
+            withContext(Dispatchers.Main) {
+                Toast.makeText(requireContext(), "Mensaje enviado", Toast.LENGTH_SHORT).show()
+                binding.etProfesor.setText("")
+                binding.etAsunto.setText("")
+                binding.etMensaje.setText("")
             }
         }
     }

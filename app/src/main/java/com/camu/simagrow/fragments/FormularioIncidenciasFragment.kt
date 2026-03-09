@@ -10,6 +10,7 @@ import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
+import com.camu.simagrow.api.RetroFitInstance
 import com.camu.simagrow.database.AppDatabase
 import com.camu.simagrow.databinding.FragmentFormularioIncidenciasBinding
 import com.camu.simagrow.model.IncidenciaEntity
@@ -19,9 +20,12 @@ import kotlinx.coroutines.withContext
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
+import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.RequestBody.Companion.toRequestBody
 
 
 class FormularioIncidenciasFragment : Fragment() {
+
     private var _binding: FragmentFormularioIncidenciasBinding? = null
     private val binding get() = _binding!!
     private lateinit var db: AppDatabase
@@ -39,29 +43,12 @@ class FormularioIncidenciasFragment : Fragment() {
 
         db = AppDatabase.getDatabase(requireContext())
 
-        // ZONAS
         val zonas = listOf("Edificio", "Planta", "Aula", "Laboratorio", "Baño", "Pasillo", "Patio", "Consejeria", "Otro")
+        binding.spZona.adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, zonas)
 
-        val adapterZonas = ArrayAdapter(
-            requireContext(),
-            android.R.layout.simple_spinner_item,
-            zonas
-        )
-        adapterZonas.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        binding.spZona.adapter = adapterZonas
-
-        // TIPOS
         val tipos = listOf("Electricidad", "Fontaneria", "Limpieza", "Climatizacion", "Mobiliario", "Tecnologias", "Seguridad", "Otro")
+        binding.spTipo.adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, tipos)
 
-        val adapterTipo = ArrayAdapter(
-            requireContext(),
-            android.R.layout.simple_spinner_item,
-            tipos
-        )
-        adapterTipo.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        binding.spTipo.adapter = adapterTipo
-
-        // Boton guardar incidencia
         binding.btnGuardar.setOnClickListener {
             val titulo = binding.etTitulo.text.toString().trim()
             val tipo = binding.spTipo.selectedItem.toString()
@@ -73,10 +60,8 @@ class FormularioIncidenciasFragment : Fragment() {
                 return@setOnClickListener
             }
 
-            // Convertir fecha a formato dd/MM/yyyy
             val fecha = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(Date())
 
-            // Datos usuario
             val prefs = requireActivity().getSharedPreferences("usuario_prefs", AppCompatActivity.MODE_PRIVATE)
             val niaUsuario = prefs.getString("nia", null)
 
@@ -85,28 +70,54 @@ class FormularioIncidenciasFragment : Fragment() {
                 return@setOnClickListener
             }
 
-            val incidencia = IncidenciaEntity(
+            reportarIncidenciaRoom(
                 titulo = titulo,
                 tipo = tipo,
                 zona = zona,
                 descripcion = descripcion,
                 fecha = fecha,
-                alumnoNia = niaUsuario
+                nia = niaUsuario
             )
+        }
+    }
 
-            lifecycleScope.launch(Dispatchers.IO) {
-                db.incidenciaDao().insertarIncidencia(incidencia)
-                Log.i("FormIncidencias", "Incidencia guardada: $incidencia")
-                withContext(Dispatchers.Main) {
-                    Toast.makeText(requireContext(), "Incidencia guardada", Toast.LENGTH_SHORT).show()
+    private fun reportarIncidenciaRoom(titulo: String, tipo: String, zona: String, descripcion: String, fecha: String, nia: String) {
 
-                    // Limpiar formulario
-                    binding.etTitulo.text?.clear()
-                    binding.etDescripcion.text?.clear()
-                    binding.spTipo.setSelection(0)
-                    binding.spZona.setSelection(0)
-                }
+        val incidencia = IncidenciaEntity(
+            titulo = titulo,
+            tipo = tipo,
+            zona = zona,
+            descripcion = descripcion,
+            fecha = fecha,
+            alumnoNia = nia
+        )
 
+        lifecycleScope.launch(Dispatchers.IO) {
+
+            db.incidenciaDao().insertarIncidencia(incidencia)
+
+            try {
+                val nombreBody = titulo.toRequestBody("text/plain".toMediaType())
+
+                RetroFitInstance.api.crearIncidencia(
+                    nombre = nombreBody,
+                    tipo = tipo,
+                    zona = zona,
+                    descripcion = descripcion,
+                    fecha = fecha,
+                    alumnoNIA = nia.toInt(),
+                    estado = "ABIERTA"
+                )
+            } catch (e: Exception) {
+                Log.e("API", "Error enviando incidencia: ${e.message}")
+            }
+
+            withContext(Dispatchers.Main) {
+                Toast.makeText(requireContext(), "Incidencia guardada", Toast.LENGTH_SHORT).show()
+                binding.etTitulo.text?.clear()
+                binding.etDescripcion.text?.clear()
+                binding.spTipo.setSelection(0)
+                binding.spZona.setSelection(0)
             }
         }
     }

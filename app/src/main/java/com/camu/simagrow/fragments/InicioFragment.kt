@@ -51,10 +51,12 @@ class InicioFragment : Fragment() {
         val tvContador = view.findViewById<TextView>(R.id.tvContador)
         tvContador.text = total.toString()
 
+        // Boton ir formulario incidencias
         binding.cvCrearIncidencia.setOnClickListener {
             (requireActivity() as MainActivity).cargarFragments(FormularioIncidenciasFragment())
         }
 
+        // Boton ir formulario mensje profesor
         binding.btnFormProfesor.setOnClickListener {
             (requireActivity() as MainActivity).cargarFragments(FormularioMensajeFragment())
         }
@@ -65,7 +67,6 @@ class InicioFragment : Fragment() {
             layoutManager = LinearLayoutManager(requireContext())
             adapter = noticiasAdapter
         }
-
 
         // Cargar noticias con Jsoup
         cargarNoticias()

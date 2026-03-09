@@ -1,5 +1,6 @@
 package com.camu.simagrow.adapters
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -38,6 +39,8 @@ class IncidenciaAdapter(
 
         val incidencia = lista[position]
 
+        Log.d("INCIDENCIA_ADAPTER", "Mostrando incidencia: ${incidencia.titulo}")
+
         with(holder) {
 
             titulo.text = incidencia.titulo
@@ -69,8 +72,9 @@ class IncidenciaAdapter(
             )
             img.setColorFilter(colorIcono)
 
-
             btnEliminar.setOnClickListener {
+
+                Log.w("INCIDENCIA_ADAPTER", "Intentando eliminar incidencia: ${incidencia.id}")
 
                 val builder = androidx.appcompat.app.AlertDialog.Builder(itemView.context)
                 builder.setTitle("Eliminar incidencia")
@@ -93,6 +97,7 @@ class IncidenciaAdapter(
     override fun getItemCount() = lista.size
 
     fun actualizarLista(nuevaLista: List<IncidenciaEntity>) {
+        Log.i("INCIDENCIA_ADAPTER", "Actualizando lista con ${nuevaLista.size} incidencias")
         lista = nuevaLista
         notifyDataSetChanged()
     }
