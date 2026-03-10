@@ -30,6 +30,7 @@ class SoporteAdapter(private val lista: List<SoporteEntity>) :
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = lista[position]
 
+        // Mostrar datos
         with(holder){
             nombre.text = item.nombre
             nia.text = "NIA: ${item.nia}"

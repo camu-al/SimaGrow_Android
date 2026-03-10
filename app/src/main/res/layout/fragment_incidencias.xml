@@ -8,7 +8,6 @@
     android:orientation="vertical"
     android:padding="12dp">
 
-    <!-- Título de la pantalla -->
     <TextView
         android:id="@+id/tvTituloPantalla"
         android:layout_width="match_parent"
@@ -19,7 +18,18 @@
         android:textColor="@color/texto_principal"
         android:layout_marginBottom="12dp" />
 
-    <!-- RecyclerView -->
+    <Spinner
+        android:id="@+id/spinnerFiltro"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp"/>
+
+    <Spinner
+        android:id="@+id/spinnerZona"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp"/>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerIncidencias"
         android:layout_width="match_parent"

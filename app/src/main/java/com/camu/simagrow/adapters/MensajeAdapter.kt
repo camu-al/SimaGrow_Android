@@ -42,7 +42,7 @@ class MensajeAdapter(
         // Asunto
         holder.tvAsunto.text = mensaje.asunto
 
-        // Mostrar profesor o alumno según el rol
+        // Mostrar profesor o alumno segun el rol
         if (rol == "profesor") {
             holder.tvExtra.text = "Alumno: ${mensaje.alumnoNombre} (NIA: ${mensaje.alumnoNia})"
         } else {
@@ -56,8 +56,9 @@ class MensajeAdapter(
         // Mensaje
         holder.tvMensaje.text = mensaje.mensaje
 
-        // Botón eliminar
+        // Boton eliminar
         holder.btnEliminar.setOnClickListener {
+            // Alert eliminar mensaje
             val builder = androidx.appcompat.app.AlertDialog.Builder(holder.itemView.context)
             builder.setTitle("Eliminar mensaje")
             builder.setMessage("¿Seguro que deseas eliminar este mensaje?")

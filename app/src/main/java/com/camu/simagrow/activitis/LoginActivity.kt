@@ -31,6 +31,7 @@ class LoginActivity : AppCompatActivity() {
             val nia = binding.etNia.text.toString().trim()
             val password = binding.etPassword.text.toString().trim()
 
+            // Validaciones
             if (nia.isEmpty() || password.isEmpty()) {
                 toast("Los campos son obligatorios")
                 return@setOnClickListener
@@ -41,9 +42,11 @@ class LoginActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
+            // Login
             login(nia, password)
         }
 
+        // Ir al registro
         binding.btnRegistro.setOnClickListener {
             startActivity(Intent(this, RegistreActivity::class.java))
         }
@@ -54,15 +57,14 @@ class LoginActivity : AppCompatActivity() {
             try {
                 val usuarios = RetroFitInstance.api.getUsuarios()
 
+                // Validacion
                 val usuarioDTO = usuarios.find {
-                    it.nia == nia.toInt() &&
-                            it.password.equals(password, ignoreCase = true)
+                    it.nia == nia.toInt() && it.password.equals(password, ignoreCase = true)
                 }
 
                 if (usuarioDTO != null) {
                     toast("Login correcto")
-                    Log.d("LOGIN", "ROL DEL SERVIDOR (DTO): '${usuarioDTO.rol}'")
-
+                    // Datos de usuario
                     val usuarioLocal = UsuarioEntity(
                         nia = usuarioDTO.nia.toString(),
                         nombre = usuarioDTO.nombre,
@@ -72,6 +74,7 @@ class LoginActivity : AppCompatActivity() {
                         materia = usuarioDTO.materia
                     )
 
+                    // Añadir en room
                     db.usuarioDao().borrarUsuarios()
                     db.usuarioDao().insertarUsuario(usuarioLocal)
 
@@ -92,15 +95,10 @@ class LoginActivity : AppCompatActivity() {
         val prefs = getSharedPreferences("usuario_prefs", MODE_PRIVATE)
         prefs.edit { clear() }
 
-        val rolNormalizado = usuario.rol
-            ?.replace("\"", "")
-            ?.trim()
-            ?.lowercase()
-            ?: "alumno"
+        // Limpiar rol
+        val rolNormalizado = usuario.rol?.replace("\"", "")?.trim()?.lowercase() ?: "alumno"
 
-        Log.d("LOGIN", "ROL LOCAL (UsuarioEntity): '${usuario.rol}'")
-        Log.d("LOGIN", "ROL NORMALIZADO QUE VOY A GUARDAR: '$rolNormalizado'")
-
+        // Guardar usuario
         guardarUsuario(
             nia = usuario.nia,
             nombre = usuario.nombre,
@@ -118,7 +116,6 @@ class LoginActivity : AppCompatActivity() {
 
     fun guardarUsuario(nia: String, nombre: String, rol: String, curso: String?) {
         val prefs = getSharedPreferences("usuario_prefs", MODE_PRIVATE)
-        Log.d("LOGIN", "guardarUsuario() → rol recibido: '$rol'")
         prefs.edit {
             putString("nia", nia)
             putString("nombre", nombre)

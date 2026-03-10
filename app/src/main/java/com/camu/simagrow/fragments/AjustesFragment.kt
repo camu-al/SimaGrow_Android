@@ -15,7 +15,7 @@ class AjustesFragment : PreferenceFragmentCompat() {
     ) {
         setPreferencesFromResource(R.xml.root_preferences, rootKey)
 
-        //MODO OSCURO
+        //Modo Oscuro
         val oscuro = findPreference<SwitchPreferenceCompat>("oscuro")
 
         oscuro?.setOnPreferenceChangeListener { _, newValue ->
@@ -32,6 +32,7 @@ class AjustesFragment : PreferenceFragmentCompat() {
             true
         }// Fin modo oscuro
 
+        // Musica
         val musica = findPreference<SwitchPreferenceCompat>("musica")
 
         musica?.setOnPreferenceChangeListener { _, newValue ->

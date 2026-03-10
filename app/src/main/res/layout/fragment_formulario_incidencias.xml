@@ -29,7 +29,6 @@
         app:layout_constraintTop_toBottomOf="@id/tvTituloPantallaIncidencias"
         app:layout_constraintStart_toStartOf="parent"/>
 
-    <!-- INPUT TÍTULO -->
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/layoutTitulo"
         android:layout_width="0dp"
@@ -45,7 +44,6 @@
             android:hint="Título de la incidencia"/>
     </com.google.android.material.textfield.TextInputLayout>
 
-    <!-- TIPO -->
     <TextView
         android:id="@+id/tvTipo"
         android:layout_width="0dp"
@@ -64,7 +62,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
 
-    <!-- ZONA -->
     <TextView
         android:id="@+id/tvZona"
         android:layout_width="0dp"
@@ -83,7 +80,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
 
-    <!-- DESCRIPCIÓN -->
     <TextView
         android:id="@+id/tvDescripcion"
         android:layout_width="0dp"
@@ -111,7 +107,6 @@
             android:inputType="textMultiLine"/>
     </com.google.android.material.textfield.TextInputLayout>
 
-    <!-- REPORTAR -->
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnGuardar"
         android:layout_width="wrap_content"

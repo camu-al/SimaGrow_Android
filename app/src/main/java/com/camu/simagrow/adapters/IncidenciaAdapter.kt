@@ -13,9 +13,11 @@ import com.camu.simagrow.R
 import com.camu.simagrow.model.IncidenciaEntity
 
 class IncidenciaAdapter(
-    private var lista: List<IncidenciaEntity>,
+    var listaOriginal: List<IncidenciaEntity>,
     private val onEliminarClick: (IncidenciaEntity) -> Unit
 ) : RecyclerView.Adapter<IncidenciaAdapter.ViewHolder>() {
+
+    private var listaActual = listaOriginal
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
@@ -35,9 +37,11 @@ class IncidenciaAdapter(
         return ViewHolder(view)
     }
 
+    override fun getItemCount() = listaActual.size
+
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 
-        val incidencia = lista[position]
+        val incidencia = listaActual[position]
 
         Log.d("INCIDENCIA_ADAPTER", "Mostrando incidencia: ${incidencia.titulo}")
 
@@ -49,11 +53,10 @@ class IncidenciaAdapter(
             descripcion.text = incidencia.descripcion
             fecha.text = incidencia.fecha
 
-            // Estado fijo por ahora
-            estado.text = "PENDIENTE"
+            estado.text = incidencia.estado.uppercase()
 
-            // Imagen segun tipo
-            val iconRes = when (incidencia.tipo.lowercase()) {
+            // Aplicar imagen segun el tipo de incidencia
+            val icono = when (incidencia.tipo.lowercase()) {
                 "electricidad" -> R.drawable.outline_electric_bolt_24
                 "fontaneria" -> R.drawable.baseline_water_drop_24
                 "limpieza" -> R.drawable.outline_cleaning_services_24
@@ -64,8 +67,9 @@ class IncidenciaAdapter(
                 "otro" -> R.drawable.baseline_report_problem_24
                 else -> R.drawable.cade_foto_perfil
             }
-            img.setImageResource(iconRes)
+            img.setImageResource(icono)
 
+            // Color al icono
             val colorIcono = ContextCompat.getColor(
                 itemView.context,
                 R.color.tipo_incidencia
@@ -73,9 +77,9 @@ class IncidenciaAdapter(
             img.setColorFilter(colorIcono)
 
             btnEliminar.setOnClickListener {
-
                 Log.w("INCIDENCIA_ADAPTER", "Intentando eliminar incidencia: ${incidencia.id}")
 
+                // Alerta eliminar incidencia
                 val builder = androidx.appcompat.app.AlertDialog.Builder(itemView.context)
                 builder.setTitle("Eliminar incidencia")
                 builder.setMessage("¿Seguro que deseas eliminar esta incidencia?")
@@ -90,15 +94,13 @@ class IncidenciaAdapter(
 
                 builder.show()
             }
-
         }
     }
 
-    override fun getItemCount() = lista.size
-
+    // Actualiza la lista mostrada
     fun actualizarLista(nuevaLista: List<IncidenciaEntity>) {
         Log.i("INCIDENCIA_ADAPTER", "Actualizando lista con ${nuevaLista.size} incidencias")
-        lista = nuevaLista
+        listaActual = nuevaLista
         notifyDataSetChanged()
     }
 }

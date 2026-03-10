@@ -8,7 +8,6 @@
     android:layout_height="match_parent"
     tools:context=".activitis.RegistreActivity">
 
-    <!-- FONDO -->
     <ImageView
         android:id="@+id/imgFondo"
         android:layout_width="0dp"
@@ -21,7 +20,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
 
-    <!-- TÍTULO -->
     <TextView
         android:id="@+id/tvRegistre"
         android:layout_width="match_parent"
@@ -34,7 +32,6 @@
         android:textStyle="bold"
         app:layout_constraintTop_toTopOf="parent"/>
 
-    <!-- NOMBRE -->
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/layoutNombre"
         android:layout_width="0dp"
@@ -53,7 +50,6 @@
             android:hint="Nombre completo"/>
     </com.google.android.material.textfield.TextInputLayout>
 
-    <!-- NIA -->
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/layoutNia"
         android:layout_width="0dp"
@@ -72,7 +68,6 @@
             android:hint="NIA"/>
     </com.google.android.material.textfield.TextInputLayout>
 
-    <!-- CONTRASEÑA (con icono de ojo) -->
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/layoutPassword"
         android:layout_width="0dp"
@@ -93,7 +88,6 @@
             android:inputType="textPassword"/>
     </com.google.android.material.textfield.TextInputLayout>
 
-    <!-- CONFIRMAR CONTRASEÑA (con icono de ojo) -->
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/layoutConfirmar"
         android:layout_width="0dp"
@@ -114,7 +108,6 @@
             android:inputType="textPassword"/>
     </com.google.android.material.textfield.TextInputLayout>
 
-    <!-- SPINNER CURSO -->
     <Spinner
         android:id="@+id/spCurso"
         android:layout_width="0dp"
@@ -124,7 +117,6 @@
         app:layout_constraintStart_toStartOf="@id/layoutConfirmar"
         app:layout_constraintEnd_toEndOf="@id/layoutConfirmar"/>
 
-    <!-- BOTÓN VOLVER -->
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnVolver"
         android:layout_width="140dp"
@@ -136,7 +128,6 @@
         app:layout_constraintTop_toBottomOf="@id/spCurso"
         app:layout_constraintStart_toStartOf="parent"/>
 
-    <!-- BOTÓN CREAR CUENTA -->
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnCrearCuenta"
         android:layout_width="140dp"
@@ -148,7 +139,6 @@
         app:layout_constraintTop_toBottomOf="@id/spCurso"
         app:layout_constraintEnd_toEndOf="parent"/>
 
-    <!-- FOOTER -->
     <TextView
         android:id="@+id/tvFooterRegistre"
         android:layout_width="match_parent"

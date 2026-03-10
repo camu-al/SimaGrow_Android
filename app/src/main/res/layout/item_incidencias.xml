@@ -17,7 +17,6 @@
         android:layout_height="wrap_content"
         android:padding="12dp">
 
-        <!-- Imagen -->
         <ImageView
             android:id="@+id/imgIncidencia"
             android:layout_width="60dp"
@@ -27,7 +26,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <!-- Botón eliminar -->
         <ImageButton
             android:id="@+id/btnEliminar"
             android:layout_width="32dp"
@@ -38,7 +36,6 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
 
-        <!-- Título -->
         <TextView
             android:id="@+id/tvTituloIncidencia"
             android:layout_width="0dp"
@@ -55,7 +52,6 @@
             android:layout_marginStart="12dp"
             android:layout_marginEnd="8dp"/>
 
-        <!-- Zona -->
         <TextView
             android:id="@+id/tvZona"
             android:layout_width="wrap_content"
@@ -68,7 +64,6 @@
             app:layout_constraintEnd_toStartOf="@id/tvFecha"
             android:layout_marginTop="4dp"/>
 
-        <!-- Fecha -->
         <TextView
             android:id="@+id/tvFecha"
             android:layout_width="wrap_content"
@@ -83,8 +78,6 @@
             app:layout_constraintBottom_toBottomOf="@id/tvZona"
             android:layout_marginStart="8dp"/>
 
-
-        <!-- Tipo -->
         <TextView
             android:id="@+id/tvTipo"
             android:layout_width="wrap_content"
@@ -100,7 +93,6 @@
             app:layout_constraintStart_toStartOf="@id/tvTituloIncidencia"
             app:layout_constraintTop_toBottomOf="@id/tvZona"/>
 
-        <!-- Estado -->
         <TextView
             android:id="@+id/tvEstado"
             android:layout_width="wrap_content"
@@ -116,7 +108,6 @@
             app:layout_constraintStart_toEndOf="@id/tvTipo"
             app:layout_constraintBaseline_toBaselineOf="@id/tvTipo"/>
 
-        <!-- Descripción -->
         <TextView
             android:id="@+id/tvDescripcionIncidencia"
             android:layout_width="0dp"

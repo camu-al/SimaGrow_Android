@@ -22,7 +22,6 @@ import com.camu.simagrow.databinding.ActivityMainBinding
 import com.camu.simagrow.fragments.*
 import com.google.android.material.navigation.NavigationView
 import androidx.core.content.edit
-import android.util.Log
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
@@ -34,6 +33,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private var niaUsuario: String = ""
     private var nombreUsuario: String = "Usuario"
     private var cursoUsuario: String = ""
+    private var materiaUsuario: String = ""
     private var rolUsuario: String = "alumno"
     private var isAlumno: Boolean = true
 
@@ -50,19 +50,28 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         // -------------- CARGAR USUARIO --------------
         cargarDatosUsuario()
 
+        // -------------- Drawer Cabezera --------------
         val header = binding.navView.getHeaderView(0)
+
         header.findViewById<TextView>(R.id.tvNombreUsuarioDrawer).text = nombreUsuario
         header.findViewById<TextView>(R.id.tvNiaUsuarioDrawer).text = "NIA: $niaUsuario"
-        header.findViewById<TextView>(R.id.tvCursoUsuarioDrawer).text = "Curso: $cursoUsuario"
 
-        // -------------- MUSICA --------------
+        val infoDrawer = header.findViewById<TextView>(R.id.tvCursoUsuarioDrawer)
+
+        if (isAlumno) {
+            infoDrawer.text = "Curso: $cursoUsuario"
+        } else {
+            infoDrawer.text = "Materia: $materiaUsuario"
+        }
+
+        // -------------- Musica --------------
         musicaPrincipal = MusicaPrincipal(this)
 
-        // -------------- TOOLBAR --------------
+        // -------------- Toolbar --------------
         setSupportActionBar(binding.toolbarInclude.miToolBar)
         supportActionBar?.setDisplayShowTitleEnabled(false)
 
-        // -------------- BOTTOM NAV --------------
+        // -------------- Bottom nav --------------
         binding.bottonNav.menu.clear()
         if (isAlumno) {
             binding.bottonNav.inflateMenu(R.menu.menu_alumno)
@@ -70,6 +79,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             binding.bottonNav.inflateMenu(R.menu.menu_profesor)
         }
 
+        // Botones del bottom menu segun el rol
         binding.bottonNav.setOnItemSelectedListener { item ->
             if (isAlumno) {
                 when (item.itemId) {
@@ -88,7 +98,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             }
         }
 
-        // --------------- DRAWER ---------------
+        // --------------- Drawer ---------------
         val toggle = ActionBarDrawerToggle(
             this,
             binding.drawerLayout,
@@ -100,19 +110,20 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         toggle.syncState()
         binding.navView.setNavigationItemSelectedListener(this)
 
+        // Si es profesor que no tenga menu soporte
         if (!isAlumno) {
             val menu = binding.navView.menu
             menu.findItem(R.id.nav_soporte)?.isVisible = false
         }
 
-        // -------------- FRAGMENTO INICIAL --------------
+        // -------------- Fragment default --------------
         if (savedInstanceState == null) {
             cargarFragments(InicioFragment())
-            binding.bottonNav.selectedItemId =
-                if (isAlumno) R.id.bottom_Home else R.id.bottom_HomeProfe
+            // Cargar segun el rol del usuario
+            binding.bottonNav.selectedItemId = if (isAlumno) R.id.bottom_Home else R.id.bottom_HomeProfe
         }
 
-        // -------------- MODO OSCURO --------------
+        // -------------- Modo Oscuro --------------
         val modoOscuro = PreferenceManager.getDefaultSharedPreferences(this)
             .getBoolean("oscuro", false)
 
@@ -122,22 +133,24 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         )
     }
 
+    // -------------- Funciones --------------
     private fun cargarDatosUsuario() {
         prefs = getSharedPreferences("usuario_prefs", MODE_PRIVATE)
 
+        // Datos del usuario
         niaUsuario = prefs.getString("nia", "") ?: ""
         nombreUsuario = prefs.getString("nombre", "Usuario") ?: "Usuario"
         cursoUsuario = prefs.getString("curso", "") ?: ""
+        materiaUsuario = prefs.getString("materia", "") ?: ""
 
-        rolUsuario = prefs.getString("rol", "alumno")
-            ?.trim()
-            ?.lowercase()
-            ?: "alumno"
+        // Limpiar rol
+        rolUsuario = prefs.getString("rol", "alumno")?.trim()?.lowercase() ?: "alumno"
 
-        // Rol por defecto alumno
+        // Si no es ningun rol alumno por defecto
         if (rolUsuario != "alumno" && rolUsuario != "profesor") {
             rolUsuario = "alumno"
         }
+
         isAlumno = rolUsuario == "alumno"
     }
 
@@ -147,6 +160,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         return true
     }
 
+    // Boton toolbar formulario incidencias
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.actionRegistrarIncidencia -> {
@@ -157,9 +171,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         }
     }
 
-    // Menu Bottom
+    // Menu segun el rol del usuario
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
-        // Menu Drawer segun el rol
+        // Aplicar menus segun el rol
         val permitido = when (rolUsuario) {
             "alumno" -> itemPermitidoParaAlumno(item.itemId)
             "profesor" -> itemPermitidoParaProfesor(item.itemId)
@@ -171,6 +185,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             return true
         }
 
+        // Switch de los menus
         when (item.itemId) {
             R.id.nav_info -> cargarFragments(AcercaDeFragment())
             R.id.nav_soporte -> cargarFragments(SoporteFragment())
@@ -189,7 +204,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         return true
     }
 
-    // Items menu drawer alumno
+    // Funcion menu para alumno
     private fun itemPermitidoParaAlumno(itemId: Int): Boolean {
         return when (itemId) {
             R.id.nav_info,
@@ -199,7 +214,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             else -> false
         }
     }
-    // Items menu drawer Profesor
+
+    // Funcion menu para profesor
     private fun itemPermitidoParaProfesor(itemId: Int): Boolean {
         return when (itemId) {
             R.id.nav_info,
@@ -209,12 +225,14 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         }
     }
 
+    // Funcion cargar fragments
     fun cargarFragments(fragment: Fragment) {
         supportFragmentManager.beginTransaction()
             .replace(R.id.contenedorFragments, fragment)
             .commit()
     }
 
+    // Funcion alerta
     private fun mostrarAlerta(titulo:String, mensaje:String, accionConfirmar:()->Unit){
         val builder = androidx.appcompat.app.AlertDialog.Builder(this)
         builder.setTitle(titulo)
@@ -224,6 +242,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         builder.show()
     }
 
+    // Funciones musica
     fun iniciarMusica() { musicaPrincipal.reproducirSnd(R.raw.lofi_music2) }
     fun pararMusica() { musicaPrincipal.detenerMusica() }
 

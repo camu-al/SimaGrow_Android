@@ -41,7 +41,7 @@ class MensajePorfeFragment : Fragment() {
 
             lifecycleScope.launch(Dispatchers.IO) {
 
-                // BORRAR SEGÚN ROL
+                // Borrar segun el rol en room
                 if (rol == "profesor") {
                     db.mensajeDao().borrarMensajePorId(mensaje.id)
                 } else {
@@ -67,12 +67,14 @@ class MensajePorfeFragment : Fragment() {
     }
 
     private fun cargarMensajes() {
+        // Datos usuario
         val prefs = requireActivity().getSharedPreferences("usuario_prefs", AppCompatActivity.MODE_PRIVATE)
         val nia = prefs.getString("nia", null) ?: return
         val rol = prefs.getString("rol", "alumno")?.trim()?.lowercase()
 
         lifecycleScope.launch(Dispatchers.IO) {
 
+            // Mostrar mensaje segun el rol
             val mensajes = if (rol == "profesor") {
                 db.mensajeDao().obtenerTodosLosMensajes()
             } else {

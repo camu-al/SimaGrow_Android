@@ -179,7 +179,7 @@
                     </LinearLayout>
 
                 </com.google.android.material.card.MaterialCardView>
-                <!-- CardView: Favoritos -->
+
                 <com.google.android.material.card.MaterialCardView
                     android:id="@+id/cvContadorIncidencias"
                     android:layout_width="160dp"

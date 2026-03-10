@@ -29,8 +29,8 @@ class RegistreActivity : AppCompatActivity() {
 
         db = AppDatabase.getDatabase(this)
 
-        val cursos = listOf("1SMX", "2SMX","1DAM", "2DAM","1DAW", "2DAW", "1ASIR", "2ASIR")
-
+        // Spinner de los cursos
+        val cursos = listOf("1 SMX", "2 SMX","1 DAM", "2 DAM","1 DAW", "2 DAW", "1 ASIR", "2 ASIR")
         val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, cursos)
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         binding.spCurso.adapter = adapter
@@ -43,37 +43,37 @@ class RegistreActivity : AppCompatActivity() {
             val curso = binding.spCurso.selectedItem.toString()
 
             // ---------------- VALIDACIONES ----------------
-            // Campos vacíos
+            // Campos vacios
             if (nombre.isEmpty() || nia.isEmpty() || password.isEmpty() || confirmar.isEmpty()) {
                 toast("Todos los campos son obligatorios")
                 return@setOnClickListener
             }
 
-            // Nombre mínimo
+            // Nombre minim de 3 lletres
             if (nombre.length < 3) {
                 toast("El nombre es demasiado corto")
                 return@setOnClickListener
             }
 
-            // NIA: 8 números
+            // Nia con 8 numeros
             if (!nia.matches(Regex("\\d{8}"))) {
                 toast("El NIA debe tener 8 números")
                 return@setOnClickListener
             }
 
-            // Contraseña mínima
+            // Contraseña minima
             if (password.length < 6) {
                 toast("La contraseña debe tener al menos 6 caracteres")
                 return@setOnClickListener
             }
 
-            // Contraseñas iguales
+            // Contraseñas igual a confirmarContraseña
             if (password != confirmar) {
                 toast("Las contraseñas no coinciden")
                 return@setOnClickListener
             }
 
-            // ---------------- REGISTRAR USUARIO ----------------
+            // ---------------- Registrar usuario ----------------
             registrarUsuario(nombre,nia,password, curso)
         }
 
@@ -82,6 +82,7 @@ class RegistreActivity : AppCompatActivity() {
         }
     }
 
+    // Registrar
     private fun registrarUsuario(nombre: String, nia: String, password: String, curso: String) {
         lifecycleScope.launch(Dispatchers.IO) {
 
@@ -97,7 +98,7 @@ class RegistreActivity : AppCompatActivity() {
             var registradoEnServidor = false
 
             try {
-                // Intentar registrar en servidor
+                // Intentar registrar en servidor un alumno
                 val response = RetroFitInstance.api.registrarUsuario(
                     nia = nia.toInt(),
                     nombre = nombre,
@@ -132,6 +133,7 @@ class RegistreActivity : AppCompatActivity() {
         }
     }
 
+    // Modelmapper
     fun UsuarioEntity.toDTO(): UsuarioDTO {
         return UsuarioDTO(
             nia = this.nia.toInt(),

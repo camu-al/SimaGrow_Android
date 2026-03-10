@@ -8,7 +8,6 @@
     android:layout_height="match_parent"
     tools:context=".activitis.LoginActivity">
 
-    <!-- FONDO -->
     <ImageView
         android:id="@+id/imgFondo"
         android:layout_width="0dp"
@@ -22,7 +21,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
 
-    <!-- TÍTULO -->
     <TextView
         android:id="@+id/tvInciarSesion"
         android:layout_width="match_parent"
@@ -35,7 +33,6 @@
         android:textStyle="bold"
         app:layout_constraintTop_toTopOf="parent"/>
 
-    <!-- NIA -->
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/layoutNia"
         android:layout_width="0dp"
@@ -54,7 +51,6 @@
             android:hint="NIA"/>
     </com.google.android.material.textfield.TextInputLayout>
 
-    <!-- CONTRASEÑA (con icono de ojo) -->
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/layoutPassword"
         android:layout_width="0dp"
@@ -75,7 +71,6 @@
             android:inputType="textPassword"/>
     </com.google.android.material.textfield.TextInputLayout>
 
-    <!-- BOTÓN INICIAR SESIÓN -->
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnIniciarSesion"
         android:layout_width="140dp"
@@ -87,7 +82,6 @@
         app:layout_constraintTop_toBottomOf="@id/layoutPassword"
         app:layout_constraintStart_toStartOf="parent"/>
 
-    <!-- BOTÓN REGISTRO -->
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnRegistro"
         android:layout_width="140dp"
@@ -99,7 +93,6 @@
         app:layout_constraintTop_toBottomOf="@id/layoutPassword"
         app:layout_constraintEnd_toEndOf="parent"/>
 
-    <!-- FOOTER -->
     <TextView
         android:id="@+id/tvFooter"
         android:layout_width="match_parent"

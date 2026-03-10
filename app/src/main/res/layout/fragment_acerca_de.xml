@@ -10,7 +10,6 @@
         android:gravity="center_horizontal"
         android:orientation="vertical">
 
-        <!-- LOGO DE LA APP -->
         <ImageView
             android:id="@+id/imgLogoApp"
             android:layout_width="120dp"
@@ -18,7 +17,6 @@
             android:layout_marginBottom="16dp"
             android:src="@drawable/img_simagrow_logo" />
 
-        <!-- NOMBRE DE LA APP -->
         <TextView
             android:id="@+id/tvNombreApp"
             android:layout_width="wrap_content"
@@ -28,7 +26,6 @@
             android:textSize="24sp"
             android:textStyle="bold" />
 
-        <!-- VERSIÓN -->
         <TextView
             android:id="@+id/tvVersionApp"
             android:layout_width="wrap_content"
@@ -38,14 +35,12 @@
             android:textColor="#777777"
             android:textSize="14sp" />
 
-        <!-- SECCIÓN DE INFORMACIÓN -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:padding="16dp">
 
-            <!-- TÍTULO DESCRIPCIÓN -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -54,7 +49,6 @@
                 android:textSize="18sp"
                 android:textStyle="bold" />
 
-            <!-- DESCRIPCIÓN -->
             <TextView
                 android:id="@+id/tvDescripcionApp"
                 android:layout_width="match_parent"
@@ -63,7 +57,6 @@
                 android:text="SimaGrow es una aplicación diseñada para gestionar incidencias, comunicación con profesores y mejorar la organización del alumnado."
                 android:textSize="16sp" />
 
-            <!-- INFO DESARROLLADOR -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -97,7 +90,6 @@
                 android:layout_marginBottom="10dp"
                 android:text="Email: 46018692.secretaria@edu.gva.es" />
 
-            <!-- HORARIOS -->
             <TextView
                 android:id="@+id/tvHorario"
                 android:layout_width="wrap_content"
@@ -111,15 +103,16 @@
                 android:id="@+id/tvTextoHorarioMati"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Matins\nDilluns a divendres de 9:00h a 14:00h\nJuliol i Setembre:\nDilluns a divendres de 9:00h a 13:00h" />
+                android:layout_marginBottom="2dp"
+                android:text="Matins:\nDilluns a divendres de 9:00h a 14:00h\nJuliol i Setembre:\nDilluns a divendres de 9:00h a 13:00h" />
 
             <TextView
                 android:id="@+id/tvTextoHorarioVesprada"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Vesprades\nDel 15 d'octubre fins el 15 de maig\nDijous: 16:00 a 20:30 hores\nJuny a Setembre: Tancat" />
+                android:layout_marginBottom="10dp"
+                android:text="Vesprades:\nDel 15 d'octubre fins el 15 de maig\nDijous: 16:00 a 20:30 hores\nJuny a Setembre: Tancat" />
 
-            <!-- LICENCIAS -->
             <TextView
                 android:id="@+id/tvLicencia"
                 android:layout_width="wrap_content"

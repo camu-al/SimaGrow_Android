@@ -36,6 +36,8 @@ class NoticiaAdapter(private val noticias: List<Noticia>) :
     }
     override fun onBindViewHolder(holder: NoticiaViewHolder, position: Int) {
         val noticia = noticias[position]
+
+        // Mostrar Noticias del centro
         with(holder){
             tvTitulo.text = noticia.titulo
             tvDescripcion.text = resumirTextoNoticia(noticia.descripcion)
@@ -56,6 +58,7 @@ class NoticiaAdapter(private val noticias: List<Noticia>) :
 
     }
     override fun getItemCount(): Int = noticias.size
+    // Formatear el tipo de la fecha
     fun formatearFecha(fechaOriginal: String): String {
         return try {
             val inputFormat = if (fechaOriginal.contains("T")) {
@@ -75,6 +78,7 @@ class NoticiaAdapter(private val noticias: List<Noticia>) :
         }
     }
 
+    // Limitar el texto de la noticia
     fun resumirTextoNoticia(texto: String, maxChars: Int = 120): String {
         return if (texto.length > maxChars) {
             texto.take(maxChars).trimEnd() + "…"

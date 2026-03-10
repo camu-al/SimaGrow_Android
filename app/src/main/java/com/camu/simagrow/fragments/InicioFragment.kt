@@ -66,8 +66,7 @@ class InicioFragment : Fragment() {
             }
 
         } else {
-
-            // Alumno → comportamiento normal
+            // Si es alumno mostrar formulario
             binding.btnFormProfesor.setOnClickListener {
                 (requireActivity() as MainActivity).cargarFragments(FormularioMensajeFragment())
             }
@@ -93,6 +92,7 @@ class InicioFragment : Fragment() {
         cargarNoticias()
     }
 
+    // Contador incidencias
     private fun cargarContador() {
         lifecycleScope.launch {
             val total = db.incidenciaDao().contarIncidencias()
@@ -100,14 +100,17 @@ class InicioFragment : Fragment() {
         }
     }
 
+    // Cargar ultimas noticias del centro
     private fun cargarNoticias() {
         lifecycleScope.launch(Dispatchers.IO) {
             try {
+                // Cargar url i conectar con Jsoup
                 val url = "https://portal.edu.gva.es/ieslluissimarro/entrades/"
                 val doc = Jsoup.connect(url).get()
 
                 val noticiasTemp = mutableListOf<Noticia>()
 
+                // Seleccionar el tipo i sus Query
                 doc.select("article").forEach { article ->
                     val titulo = article.selectFirst("h2.entry-title")?.text() ?: "Sin título"
                     val descripcion = article.selectFirst("div.entry-summary > p")?.text() ?: ""
@@ -115,6 +118,7 @@ class InicioFragment : Fragment() {
                     val fecha = article.selectFirst("div.entry-meta time")?.attr("datetime") ?: ""
                     val imagenUrl = article.selectFirst("div.post-image > a > img")?.attr("src") ?: ""
 
+                    // Añadir noticia
                     noticiasTemp.add(Noticia(titulo, descripcion, enlace, fecha, imagenUrl))
                 }
 

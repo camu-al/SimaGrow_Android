@@ -14,7 +14,6 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <!-- Imagen destacada -->
         <ImageView
             android:id="@+id/imgNoticia"
             android:layout_width="match_parent"
@@ -29,7 +28,6 @@
             android:orientation="vertical"
             android:padding="12dp">
 
-            <!-- Título -->
             <TextView
                 android:id="@+id/tvTitulo"
                 android:layout_width="match_parent"
@@ -41,7 +39,6 @@
                 android:textSize="16sp"
                 android:textStyle="bold" />
 
-            <!-- Fecha -->
             <TextView
                 android:id="@+id/tvFecha"
                 android:layout_width="match_parent"
@@ -51,7 +48,6 @@
                 android:textColor="@color/texto_noticia_secundario"
                 android:textSize="12sp" />
 
-            <!-- Descripción resumida -->
             <TextView
                 android:id="@+id/tvDescripcion"
                 android:layout_width="match_parent"

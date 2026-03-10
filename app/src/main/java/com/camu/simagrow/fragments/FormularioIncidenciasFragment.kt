@@ -42,9 +42,11 @@ class FormularioIncidenciasFragment : Fragment() {
 
         db = AppDatabase.getDatabase(requireContext())
 
+        // Spinner Zonas
         val zonas = listOf("Edificio", "Planta", "Aula", "Laboratorio", "Baño", "Pasillo", "Patio", "Consejeria", "Otro")
         binding.spZona.adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, zonas)
 
+        // Spinner tipos
         val tipos = listOf("Electricidad", "Fontaneria", "Limpieza", "Climatizacion", "Mobiliario", "Tecnologias", "Seguridad", "Otro")
         binding.spTipo.adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, tipos)
 
@@ -81,6 +83,7 @@ class FormularioIncidenciasFragment : Fragment() {
         }
     }
 
+    // Guardar incidencias
     private fun reportarIncidenciaRoom(titulo: String, tipo: String, zona: String, descripcion: String, fecha: String, nia: String) {
 
         val incidencia = IncidenciaEntity(
@@ -94,6 +97,7 @@ class FormularioIncidenciasFragment : Fragment() {
 
         lifecycleScope.launch(Dispatchers.IO) {
 
+            // Insertar
             db.incidenciaDao().insertarIncidencia(incidencia)
 
             try {
