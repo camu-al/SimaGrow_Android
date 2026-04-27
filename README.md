@@ -20,16 +20,18 @@ El objetivo de SimaGrow fue construir una herramienta de gestión interna que de
 
 ## 📐 Arquitectura del Sistema
 
-He aplicado una estructura de capas para separar la interfaz de usuario de la lógica de acceso a datos, utilizando herramientas oficiales de Jetpack para asegurar la estabilidad del sistema.
+He implementado una arquitectura de capas estructurada para separar la interfaz de usuario (diseñada íntegramente en **XML**) de la lógica de negocio y persistencia, utilizando los componentes oficiales de **Android Jetpack**.
 
 ```mermaid
 graph TD
-    A[UI - Activities/Fragments] --> B[ViewBinding Layer]
+    A[UI Layer - XML Layouts] --> B[ViewBinding / Activities]
     B --> C[Business Logic & Coroutines]
     C --> D[(Room Database)]
     C --> E[SharedPreferences]
     
     style A fill:#3DDC84,stroke:#333,color:#fff
+    style B fill:#0073E6,stroke:#333,color:#fff
+    style C fill:#6DB33F,stroke:#333,color:#fff
     style D fill:#336791,stroke:#333,color:#fff
     style E fill:#FF9900,stroke:#333,color:#000
 ```
