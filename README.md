@@ -82,11 +82,6 @@ A continuación se muestran capturas reales de la interfaz de usuario, destacand
     </td>
   </tr>
   <tr>
-    <td align="center"><b>Incidencias</b></td>
-    <td align="center"><b>Formularios</b></td>
-    <td align="center"><b>Navegación</b></td>
-  </tr>
-  <tr>
     <td valign="top" align="center">
       <img src="https://github.com/user-attachments/assets/6d7438ad-e80b-4219-9b9e-8c8ba183ddb2" width="200" /><br>
       <sub>Listado de Incidencias</sub>
