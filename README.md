@@ -34,13 +34,13 @@ graph TD
 ## 💻 Implementación Técnica
 
 ### 🛠️ Capa de Persistencia (Data Layer)
-* **Room Database:** Implementación de una base de datos relacional local sobre SQLite para la gestión de entidades (Usuarios, Incidencias, Cursos y Actividades) con integridad referencial.
+* **Room Database:** Implementación de una base de datos relacional local sobre SQLite para la gestión de entidades (Usuarios, Incidencias) con integridad referencial.
 * **Kotlin Coroutines:** Gestión de la concurrencia mediante programación asíncrona, asegurando que las operaciones pesadas de base de datos se ejecuten fuera del hilo principal (Main Thread).
 * **SharedPreferences:** Uso de almacenamiento clave-valor para la persistencia de la sesión del usuario y flags de estado de la aplicación.
 
 ### 🎨 Interfaz de Usuario (UI Layer)
 * **Material Design Components:** Adopción de estándares modernos de Google para componentes como *Cards*, *Floating Action Buttons* y *Input Layouts*, garantizando una UX intuitiva.
-* **ViewBinding:** Sustitución de `findViewById` por vinculación de vistas para mejorar la seguridad del código, evitando errores de punteros nulos (`NullPointerException`) y optimizando el rendimiento.
+* **ViewBinding:** Sustitución de `findViewById` por vinculación de vistas para mejorar la seguridad del código y optimizando el rendimiento.
 * **Navegación Estructurada:** Control de flujos condicionales para el acceso seguro a la aplicación mediante validaciones en tiempo real en los formularios de Login y Registro.
 
 ## 🛠️ Stack Tecnológico
